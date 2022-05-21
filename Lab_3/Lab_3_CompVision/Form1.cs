@@ -18,7 +18,9 @@ namespace Lab_3_CompVision
             pictureBox1.Image = new Bitmap(640, 480);
             pictureBox2.Image = new Bitmap(640, 480);
             pictureBox3.Image = new Bitmap(80, 80);
+            pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox4.Image = new Bitmap(80, 80);
+            pictureBox4.SizeMode = PictureBoxSizeMode.StretchImage;
             dataGridView1.ColumnCount = 4;
             dataGridView1.RowCount = 1;
             dataGridView1.RowHeadersVisible = false;
@@ -273,6 +275,21 @@ namespace Lab_3_CompVision
             if (rect.X <= x && x <= rect.X+rect.Width && rect.Y <= y && y <= rect.Y + rect.Height) return true;
             return false;
         }
+        public void resize(Rectangle rect)
+        {
+            pictureBox3.Size = new Size(rect.Width, rect.Height);
+            pictureBox3.Image = new Bitmap(rect.Width, rect.Height);
+            for (int i = 0; i < rect.Width; i++)
+            {
+                for (int j = 0; j < rect.Height; j++)
+                {
+                    Color col = ((Bitmap)work_image).GetPixel(rect.X + i, rect.Y + j);
+                    ((Bitmap)pictureBox3.Image).SetPixel(i, j, col);
+                }
+            }
+            pictureBox3.Size = new Size(80, 80);
+            pictureBox3.Refresh();
+        }
         public int detect_claster(PictureBox pictureBox, bool is_auto = false, int R_minn = 0, int R_maxx = 255, int G_minn = 0, int G_maxx = 255, int B_minn = 0, int B_maxx = 255)
         {
             list_claster.Clear();
@@ -333,7 +350,7 @@ namespace Lab_3_CompVision
                 while (h < claster_point.Count)
                 {
                     double ff = counttt(frame, list_claster[h]);
-                    MessageBox.Show(ff.ToString());
+                    //MessageBox.Show(ff.ToString());
                     if (ff * 100 < 5)
                     {
                         claster_point.RemoveAt(h);
@@ -456,7 +473,6 @@ namespace Lab_3_CompVision
             int last_x = last.X + last.Width / 2;
             int last_y = last.Y + last.Height / 2;
             double len = (double)(Math.Sqrt(Math.Pow(first.Width / 2, 2) + Math.Pow(first.Height / 2, 2)) + Math.Sqrt(Math.Pow(last.Width / 2, 2) + Math.Pow(last.Height / 2, 2)))/2;
-            //MessageBox.Show(len.ToString());
             if ((last.X <= first_x && first_x <= last.X + last.Width) && (last.Y <= first_y && first_y <= last.Y + last.Height)) return true;
             else if ((first.X <= last_x && last_x <= first.X + first.Width) && (first.Y <= last_y && last_y <= first.Y + first.Height)) return true;
             else if (Math.Sqrt(Math.Pow(first_x - last_x, 2) + Math.Pow(first_y - last_y, 2)) < len) return true;
@@ -513,257 +529,13 @@ namespace Lab_3_CompVision
             pictureBox1.Refresh();
             graphics = Graphics.FromImage(pictureBox3.Image);
             graphics.FillRectangle(Brushes.White, new Rectangle(0, 0, pictureBox3.Width, pictureBox3.Height));
-            //pictureBox3.Refresh();
             graphics = Graphics.FromImage(pictureBox4.Image);
             graphics.FillRectangle(Brushes.White, new Rectangle(0, 0, pictureBox4.Width, pictureBox4.Height));
-            //pictureBox4.Refresh();
 
-            int x_last = list_claster[e.RowIndex].Width;
-            int y_last = list_claster[e.RowIndex].Height;
-            if (x_last+y_last < 20*2)
-            {
-                resize_image(list_claster[e.RowIndex], 20, work_image, pictureBox3.Image);
-                resize_image(new Rectangle(list_claster[e.RowIndex].X, list_claster[e.RowIndex].Y, 20, 20), 40, pictureBox3.Image, pictureBox4.Image, true);
-                resize_image(new Rectangle(list_claster[e.RowIndex].X, list_claster[e.RowIndex].Y, 40, 40), 80, pictureBox4.Image, pictureBox3.Image, true);
-                //pictureBox3.Refresh();
-                //pictureBox4.Refresh();
-            }
-            else if (x_last + y_last < 40 * 2)
-            {
-                resize_image(list_claster[e.RowIndex], 40, work_image, pictureBox4.Image);
-                resize_image(new Rectangle(list_claster[e.RowIndex].X, list_claster[e.RowIndex].Y, 40, 40), 80, pictureBox4.Image, pictureBox3.Image, true);
-                //pictureBox3.Refresh();
-                //pictureBox4.Refresh();
-            }
-            else if (x_last + y_last < 80 * 2)
-            {
-                resize_image(list_claster[e.RowIndex], 80, work_image, pictureBox3.Image);
-                //resize_image(list_claster[e.RowIndex], 80, pictureBox2.Image, pictureBox4.Image);
-            }
-            else
-            {
-                resize_big_image(list_claster[e.RowIndex], 80, work_image, pictureBox3.Image);
-            }
+            resize(list_claster[e.RowIndex]);
+
             pictureBox3.Refresh();
             pictureBox4.Refresh();
-        }
-
-        public bool resize_big_image(Rectangle rect, int size_image, Image input_image, Image output_image, bool is_double = false)
-        {
-            int x_last = rect.Width;
-            int y_last = rect.Height;
-            int k_xx = 0; int k_x = 0; int j_x = 0; int d_x = 0; int d_X = 0; int j_X = 0;
-            int k_yy = 0; int k_y = 0; int j_y = 0; int d_y = 0; int d_Y = 0; int j_Y = 0;
-            bool flag_x = false; bool flag_y = false;
-            Color colorr = new Color();
-            Color colot = new Color();
-            k_x = Nod(size_image - (x_last% size_image), (x_last % size_image));
-            if (k_x <= 1)
-            {
-                x_last--;
-                k_x = Nod(size_image - (x_last % size_image), (x_last % size_image));
-            }
-
-            k_y = Nod(size_image - (y_last % size_image), (y_last % size_image));
-            if (k_y <= 1)
-            {
-                y_last--;
-                k_y = Nod(size_image - (y_last % size_image), (y_last % size_image));
-            }
-            if (x_last % size_image < 40)
-            {
-                d_x = (x_last % size_image) / k_x;
-                j_x = (size_image - (x_last % size_image)) / k_x;
-            }
-            else
-            {
-                j_x = (x_last % size_image) / k_x;
-                d_x = (size_image - (x_last % size_image)) / k_x;
-            }
-            if (y_last % size_image < 40)
-            {
-                d_y = (y_last % size_image) / k_y;
-                j_y = (size_image - (y_last % size_image)) / k_y;
-            }
-            else
-            {
-                j_y = (y_last % size_image) / k_y;
-                d_y = (size_image - (y_last % size_image)) / k_y;
-            }
-
-            try
-            {
-                k_xx = (int)(j_x / d_x);
-            }
-            catch
-            {
-                k_xx = 0;
-            }
-            try
-            {
-                k_yy = (int)(j_y / d_y);
-            }
-            catch
-            {
-                k_yy = 0;
-            }
-            //MessageBox.Show("");
-            int p = -1; int o = 0;
-            for (int i = 0; i < size_image; i++)
-            {
-                if (j_X >= j_x+d_x && d_X >= d_x)
-                {
-                    j_X = 0;
-                    d_X = 0;
-                }
-                else if (k_xx > 0 && (j_X+1) % (k_xx+1) == 0 && d_X < d_x)
-                {
-                    //MessageBox.Show("");
-                    d_X++;
-                    j_X++;
-                    p++;
-                }
-                j_X++;
-                p++;
-                o = -1;
-                for (int q = 0; q < size_image; q++)
-                {
-                    colot = ((Bitmap)work_image).GetPixel(i + rect.X, q + rect.Y);
-                    ((Bitmap)pictureBox4.Image).SetPixel(i, q, colot);
-                    if (j_Y >= j_y && d_Y >= d_y)
-                    {
-                        j_Y = 0;
-                        d_Y = 0;
-                    }
-                    if (k_yy > 0 && (j_Y+1) % (k_yy+1) == 0 && d_Y < d_y)
-                    {
-                        d_Y++;
-                        o++;
-                        //j_Y++;
-                    }
-                    o++;
-                    j_Y++;
-                    if (is_double) colorr = ((Bitmap)input_image).GetPixel(p, o);
-                    else
-                        try
-                        {
-                            colorr = ((Bitmap)input_image).GetPixel(p + rect.X, o + rect.Y);
-                            ((Bitmap)output_image).SetPixel(i, q, colorr);
-                        }
-                        catch { break; } 
-                }
-                
-                //MessageBox.Show(p.ToString());
-                //pictureBox3.Refresh();
-                //pictureBox4.Refresh();
-            }
-            pictureBox3.Refresh();
-            pictureBox4.Refresh();
-            return true;
-        }
-        public bool resize_image(Rectangle rect, int size_image, Image input_image, Image output_image, bool is_double=false)
-        {
-            if (rect.Width < size_image / 2) { 
-                resize_image(rect, size_image / 2, input_image, output_image, false);
-                return false;
-            }
-            else
-            {
-                int x_last = rect.Width;
-                int y_last = rect.Height;
-                int k_xx = 0; int k_x = 0; int j_x = 0; int d_x = 0; int d_X = 0; int j_X = 0;
-                int k_yy = 0; int k_y = 0; int j_y = 0; int d_y = 0; int d_Y = 0; int j_Y = 0;
-                bool flag_x = false; bool flag_y = false;
-                Color colorr = new Color();
-                //Color colot = new Color();
-                k_x = Nod(size_image - x_last, x_last);
-                if (k_x <= 1)
-                {
-                    x_last--;
-                    k_x = Nod(size_image - x_last, x_last);
-                }
-
-                k_y = Nod(size_image - y_last, y_last);
-                if (k_y <= 1)
-                {
-                    y_last--;
-                    k_y = Nod(size_image - y_last, y_last);
-                }
-
-                j_x = x_last / k_x;
-                d_x = (size_image - x_last) / k_x;
-                j_y = y_last / k_y;
-                d_y = (size_image - y_last) / k_y;
-
-                k_xx = (int)(j_x / d_x);
-                k_yy = (int)(j_y / d_y);
-                bool flag = false;
-                int p = -1; int o = 0;
-                for (int i = 0; i < size_image; i++)
-                {
-                    if (!flag)
-                    {
-                        if (j_X >= j_x && d_X >= d_x)
-                        {
-                            j_X = 0;
-                            d_X = 0;
-                        }
-                        p++;
-                        if (k_xx != 0 && (j_X + 1) % (k_xx) == 0 && d_X < d_x)
-                        {
-                            flag = true;
-                            d_X++;
-                        }
-                        j_X++;
-                    }
-                    else
-                    {
-                        flag = false;
-                    }
-                    bool flag2 = false;
-                    o = -1;
-                    for (int q = 0; q < size_image; q++)
-                    {
-                        //colot = ((Bitmap)work_image).GetPixel(i + list_claster[e.RowIndex].X, q + list_claster[e.RowIndex].Y);
-                        //((Bitmap)pictureBox4.Image).SetPixel(i, q, colot);
-                        if (!flag2)
-                        {
-                            if (j_Y >= j_y && d_Y >= d_y)
-                            {
-                                j_Y = 0;
-                                d_Y = 0;
-                            }
-                            o++;
-                            if ((j_Y + 1) % (k_yy) == 0 && d_Y < d_y)
-                            {
-                                d_Y++;
-                                flag2 = true;
-                            }
-                            j_Y++;
-                        }
-                        else flag2 = false;
-                        if (is_double) colorr = ((Bitmap)input_image).GetPixel(p, o);
-                        else colorr = ((Bitmap)input_image).GetPixel(p + rect.X, o + rect.Y);
-                        ((Bitmap)output_image).SetPixel(i, q, colorr);
-                    }
-                    //pictureBox3.Refresh();
-                    //pictureBox4.Refresh();
-                }
-                //pictureBox3.Refresh();
-                //pictureBox4.Refresh();
-                return true;
-            }
-        }
-        public int Nod(int x, int y)
-        {
-            while (x != y && x > 0 && y > 0 )
-            {
-                if (x > y)
-                    x = x - y;
-                else
-                    y = y - x;
-            }
-            return x;
         }
         private void Start_col_but_Click(object sender, EventArgs e)
         {
