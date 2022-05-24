@@ -56,6 +56,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.Min_size = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.Open_sahblon_but = new System.Windows.Forms.Button();
+            this.Start_anal_but = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -278,18 +280,16 @@
             this.pictureBox3.BackColor = System.Drawing.SystemColors.HighlightText;
             this.pictureBox3.Location = new System.Drawing.Point(1039, 429);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(80, 80);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox3.Size = new System.Drawing.Size(105, 98);
             this.pictureBox3.TabIndex = 38;
             this.pictureBox3.TabStop = false;
             // 
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.pictureBox4.Location = new System.Drawing.Point(1039, 571);
+            this.pictureBox4.Location = new System.Drawing.Point(1039, 536);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(108, 120);
-            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox4.Size = new System.Drawing.Size(105, 98);
             this.pictureBox4.TabIndex = 39;
             this.pictureBox4.TabStop = false;
             // 
@@ -329,12 +329,38 @@
             this.label9.TabIndex = 42;
             this.label9.Text = "Min size";
             // 
+            // Open_sahblon_but
+            // 
+            this.Open_sahblon_but.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Open_sahblon_but.Location = new System.Drawing.Point(1039, 639);
+            this.Open_sahblon_but.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Open_sahblon_but.Name = "Open_sahblon_but";
+            this.Open_sahblon_but.Size = new System.Drawing.Size(105, 54);
+            this.Open_sahblon_but.TabIndex = 44;
+            this.Open_sahblon_but.Text = "Open shablon";
+            this.Open_sahblon_but.UseVisualStyleBackColor = false;
+            this.Open_sahblon_but.Click += new System.EventHandler(this.Open_sahblon_but_Click);
+            // 
+            // Start_anal_but
+            // 
+            this.Start_anal_but.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Start_anal_but.Location = new System.Drawing.Point(928, 639);
+            this.Start_anal_but.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Start_anal_but.Name = "Start_anal_but";
+            this.Start_anal_but.Size = new System.Drawing.Size(105, 54);
+            this.Start_anal_but.TabIndex = 45;
+            this.Start_anal_but.Text = "Start analaise";
+            this.Start_anal_but.UseVisualStyleBackColor = false;
+            this.Start_anal_but.Click += new System.EventHandler(this.Start_anal_but_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
-            this.ClientSize = new System.Drawing.Size(1426, 700);
+            this.ClientSize = new System.Drawing.Size(1587, 731);
+            this.Controls.Add(this.Start_anal_but);
+            this.Controls.Add(this.Open_sahblon_but);
             this.Controls.Add(this.Min_size);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.Max_size);
@@ -405,6 +431,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox Min_size;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button Open_sahblon_but;
+        private System.Windows.Forms.Button Start_anal_but;
     }
 }
 

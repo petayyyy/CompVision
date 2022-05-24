@@ -35,11 +35,13 @@ namespace Lab_3_CompVision
             dataGridView1.Width = 400;
         }
         Image work_image = new Bitmap(640, 480);
+        Image shablon_image = new Bitmap(80, 80);
         Image work_mask_80 = new Bitmap(80, 80);
         int[,] work_data_80 = new int[80,80];
         Image output_image = new Bitmap(640, 480);
         int R = 0; int G = 0; int B = 0;
         int [,] frame = new int[640, 480];
+        int [,] frame_80 = new int[80, 80];
         int[] Blue = new int[6] { 0, 15, 0, 95, 30, 200};
         int[] Red_light1 = new int[6] { 160, 255, 30, 104, 30, 122};
         int[] Red_light2 = new int[6] { 90, 220, 15, 55, 20, 65 };
@@ -338,7 +340,7 @@ namespace Lab_3_CompVision
             {
                 graphics.DrawRectangle(pen, list_claster[k]);
             }
-            pictureBox2.Refresh();
+             pictureBox2.Refresh();
             MessageBox.Show("");
             */
             int last = 0;
@@ -557,5 +559,64 @@ namespace Lab_3_CompVision
             }
         }
 
+        private void Open_sahblon_but_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult res = openFileDialog1.ShowDialog();
+                if (res == DialogResult.OK)
+                {
+                    shablon_image = Image.FromFile(openFileDialog1.FileName);
+                    pictureBox4.Image = shablon_image;
+
+                }
+                else MessageBox.Show("Error, you don't take any file.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                MessageBox.Show("Error, your file have incorrect type. You must take .png, .jpg or .bmp.");
+            }
+            pictureBox4.Refresh();
+        }
+
+        private void Start_anal_but_Click(object sender, EventArgs e)
+        {
+            bool is_auto = true;
+            if (Open_flag)
+            {
+                for (int i = 0; i < pictureBox3.Width; i++)
+                {
+                    for (int j=0; j < pictureBox3.Height; j++)
+                    {
+                        Color pixel = ((Bitmap)pictureBox3.Image).GetPixel(i, j);
+                        if (is_auto)
+                        {
+                            if ((pixel.R >= Red_light1[0] && pixel.R <= Red_light1[1] && pixel.B >= Red_light1[4] && pixel.B <= Red_light1[5] && pixel.G >= Red_light1[2] && pixel.G <= Red_light1[3]) ||
+                                (pixel.R >= Red_light2[0] && pixel.R <= Red_light2[1] && pixel.B >= Red_light2[4] && pixel.B <= Red_light2[5] && pixel.G >= Red_light2[2] && pixel.G <= Red_light2[3]) ||
+                                (pixel.R >= Red_dark[0] && pixel.R <= Red_dark[1] && pixel.B >= Red_dark[4] && pixel.B <= Red_dark[5] && pixel.G >= Red_dark[2] && pixel.G <= Red_dark[3]) ||
+                                (pixel.R >= Blue[0] && pixel.R <= Blue[1] && pixel.B >= Blue[4] && pixel.B <= Blue[5] && pixel.G >= Blue[2] && pixel.G <= Blue[3]))
+                            {
+                                frame_80[i, j] = 1;
+                                ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.White);
+                            }
+                            else
+                            {
+                                frame_80[i, j] = 0;
+                                ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.Black);
+                            }
+                        }
+                        else
+                        {
+                            if (pixel.R >= Int32.Parse(R_min.Text) && pixel.R <= Int32.Parse(R_max.Text) && pixel.B >= Int32.Parse(B_min.Text) && pixel.B <= Int32.Parse(B_max.Text) && pixel.G >= Int32.Parse(G_min.Text) && pixel.G <= Int32.Parse(G_max.Text))
+                            {
+                                frame[i, j] = 1;
+                                ((Bitmap)pictureBox2.Image).SetPixel(i, j, Color.White);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
