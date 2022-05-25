@@ -20,3 +20,14 @@ C:\Users\ilyah\Desktop\Долги\Прога\4 Sem\CompVision\Lab_3\Lab_3_CompVi
 C:\Users\ilyah\Desktop\Долги\Прога\4 Sem\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.csproj.CoreCompileInputs.cache
 C:\Users\ilyah\Desktop\Долги\Прога\4 Sem\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.exe
 C:\Users\ilyah\Desktop\Долги\Прога\4 Sem\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.pdb
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\bin\Debug\Lab_3_CompVision.exe.config
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\bin\Debug\Lab_3_CompVision.exe
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\bin\Debug\Lab_3_CompVision.pdb
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.csproj.AssemblyReference.cache
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.csproj.SuggestedBindingRedirects.cache
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.Form1.resources
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.Properties.Resources.resources
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.csproj.GenerateResource.cache
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.csproj.CoreCompileInputs.cache
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.exe
+C:\Users\ilyah\CompVision\Lab_3\Lab_3_CompVision\obj\Debug\Lab_3_CompVision.pdb

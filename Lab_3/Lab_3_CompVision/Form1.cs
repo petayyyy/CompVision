@@ -289,6 +289,7 @@ namespace Lab_3_CompVision
                     ((Bitmap)pictureBox3.Image).SetPixel(i, j, col);
                 }
             }
+            pictureBox3.Image = new Bitmap(pictureBox3.Image, 80, 80);
             pictureBox3.Size = new Size(80, 80);
             pictureBox3.Refresh();
         }
@@ -617,6 +618,7 @@ namespace Lab_3_CompVision
                     }
                 }
             }
+            pictureBox3.Refresh();
         }
     }
 }
