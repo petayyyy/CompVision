@@ -37,6 +37,7 @@ namespace Lab_3_CompVision
             dataGridView1.Width = 500;
         }
         Image work_image = new Bitmap(640, 480);
+        Image work_mask = new Bitmap(640, 480);
         Image shablon_image = new Bitmap(80, 80);
         Image work_mask_80 = new Bitmap(80, 80);
         int[,] work_data_80 = new int[80,80];
@@ -187,26 +188,18 @@ namespace Lab_3_CompVision
             int y_min = Math.Min(rect2.Y, rect.Y);
             int x_max = Math.Max(rect2.X + rect2.Width, rect.X + rect.Width);
             int y_max = Math.Max(rect2.Y + rect2.Height, rect.Y + rect.Height);
-            if (counttt(frame, new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min)) >= Int32.Parse(Density.Text))
+            //MessageBox.Show((counttt(frame, new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min)) * 100).ToString());
+            //return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
+            if (counttt(frame, new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min))*100 >= Int32.Parse(Density.Text.ToString()))
             {
                 return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
             }
-            else if (rect.Width+rect.Height > rect2.Height+ rect2.Width && counttt(frame, rect) >= Int32.Parse(Density.Text))
+            else if (rect.Width+rect.Height > rect2.Height+ rect2.Width)
             {
                 return rect;
             }
-            else if (counttt(frame, rect2) >= Int32.Parse(Density.Text))
-            {
-                return rect2;
-            }
-            else if (counttt(frame, new Rectangle(x_min + (x_max - x_min)/2, y_min + (y_max - y_min)/2, (x_max - x_min)/2, (y_max - y_min)/2)) >= Int32.Parse(Density.Text))
-            {
-                return new Rectangle(x_min + (x_max - x_min) / 2, y_min + (y_max - y_min) / 2, (x_max - x_min) / 2, (y_max - y_min) / 2);
-            }
-            else
-            {
-                return new Rectangle (0,0,0,0);
-            }
+            return rect2;
+            
         }
         public void analize_image(int x, int y, int m = 40, int x2 = 0, int y2 = 0)
         {
@@ -329,18 +322,21 @@ namespace Lab_3_CompVision
         public void find_all_countours()
         {
             int v = 0;
-            while (v < list_claster.Count)
+            for (int u = 0; u < 2; u++)
             {
-                list_claster[v] = find_contours(list_claster[v]);
-                if (list_claster[v].Width != 0 && list_claster[v].Height != 0)
+                while (v < list_claster.Count)
                 {
-                    claster_point[v] = new int[] { list_claster[v].X + list_claster[v].Width / 2, list_claster[v].Y + list_claster[v].Height / 2 };
-                    v++;
-                }
-                else
-                {
-                    claster_point.RemoveAt(v);
-                    list_claster.RemoveAt(v);
+                    list_claster[v] = find_contours(list_claster[v]);
+                    if (list_claster[v].Width != 0 && list_claster[v].Height != 0)
+                    {
+                        claster_point[v] = new int[] { list_claster[v].X + list_claster[v].Width / 2, list_claster[v].Y + list_claster[v].Height / 2 };
+                        v++;
+                    }
+                    else
+                    {
+                        claster_point.RemoveAt(v);
+                        list_claster.RemoveAt(v);
+                    }
                 }
             }
         }
@@ -381,11 +377,38 @@ namespace Lab_3_CompVision
                 }
                 progressBar1.Value = i;
             }
+            work_mask = (Bitmap)pictureBox2.Image.Clone();
             progressBar1.Value = 0;
             pictureBox2.Refresh(); 
             progressBar1.Maximum = work_image.Width;
             ///////////////////////////////
-            analize_image(640, 480, 70);
+            analize_image(640, 480, 30);
+            find_all_countours();
+            
+            //////////////////////////
+            for (int r = 0; r < 1; r++)
+            {
+                for (int i = 0; i < list_claster.Count; i++)
+                {
+                    int g = i+1;
+                    while (g < list_claster.Count)
+                    {
+                        if (check_claster(list_claster[i], list_claster[g]))
+                        {
+                            Rectangle rect = sum_clasters_by_two(list_claster[i], list_claster[g]);
+                            if (rect.Height != 0)
+                            {
+                                list_claster[i] = rect;
+                                list_claster.RemoveAt(g);
+                                claster_point.RemoveAt(g);
+                                g--;
+                            }
+                        }
+                        g++;
+                    }
+                }
+            }
+            /////////////////////////
             find_all_countours();
             //////////////////////////////
             int h = 0;
@@ -416,9 +439,10 @@ namespace Lab_3_CompVision
                     }
                     else
                     {
-                        if (counttt(frame, new Rectangle(list_claster[h].X, list_claster[h].Y, Math.Min(list_claster[h].Height, list_claster[h].Width), Math.Min(list_claster[h].Height, list_claster[h].Width))) * 100 >= 5){
+                        if (counttt(frame, new Rectangle(list_claster[h].X, list_claster[h].Y, Math.Min(list_claster[h].Height, list_claster[h].Width), Math.Min(list_claster[h].Height, list_claster[h].Width))) * 100 >= 5)
+                        {
                             claster_point[h] = new int[] { list_claster[h].X + list_claster[h].Height / 2, list_claster[h].Y + list_claster[h].Height / 2 };
-                            list_claster[h] = new Rectangle(list_claster[h].X, list_claster[h].Y, Math.Min(list_claster[h].Height, list_claster[h].Width), Math.Min(list_claster[h].Height, list_claster[h].Width)); 
+                            list_claster[h] = new Rectangle(list_claster[h].X, list_claster[h].Y, Math.Min(list_claster[h].Height, list_claster[h].Width), Math.Min(list_claster[h].Height, list_claster[h].Width));
                         }
                         else
                         {
@@ -432,28 +456,8 @@ namespace Lab_3_CompVision
             }
             /////////////////////////
             find_all_countours();
-            //////////////////////////
-            for (int i = 0; i < list_claster.Count; i++)
-            {
-                int g = i + 1;
-                while (g < claster_point.Count)
-                {
-                    if (check_claster(list_claster[i], list_claster[g]))
-                    {
-                        Rectangle rect = sum_clasters_by_two(list_claster[i], list_claster[g]);
-                        if (rect.Height != 0)
-                        {
-                            list_claster[g] = rect;
-                            list_claster.RemoveAt(g);
-                            g--;
-                        }
-                    }
-                    g++;
-                }
-            }
-            /////////////////////////
-            find_all_countours();
             //////////////////////////////////////////
+
             if (list_claster.Count == 1 && list_claster[0].Height + list_claster[0].Width < 2 * Int32.Parse(Min_size.Text)) list_claster.Clear();
             for (int k = 0; k < list_claster.Count; k++)
             {
@@ -466,12 +470,7 @@ namespace Lab_3_CompVision
             return list_claster.Count;
         }
         public bool check_claster(Rectangle first, Rectangle last)
-        {
-            Graphics graphics = Graphics.FromImage(pictureBox2.Image);
-            Pen pen = new Pen(Color.Red);
-            graphics.DrawRectangle(pen, first);
-            graphics.DrawRectangle(pen, last);
-            pictureBox2.Refresh();
+        {           
             int first_x = first.X + first.Width / 2;
             int first_y = first.Y + first.Height / 2;
             int last_x = last.X + last.Width / 2;
@@ -490,10 +489,21 @@ namespace Lab_3_CompVision
             else if ((last.X + last.Width >= first.X && last.X + last.Width <= first.X + first.Width) && (last.Y >= first.Y && last.Y <= first.Y + first.Height)) return true;
             else if ((last.X >= first.X && last.X <= first.X + first.Width) && (last.Y + last.Height >= first.Y && last.Y + last.Height <= first.Y + first.Height)) return true;
             else if ((last.X + last.Width >= first.X && last.X + last.Width <= first.X + first.Width) && (last.Y + last.Height >= first.Y && last.Y + last.Height <= first.Y + first.Height)) return true;
-            
-            MessageBox.Show(len.ToString() + "  " + Math.Sqrt(Math.Pow(first_x - last_x, 2) + Math.Pow(first_y - last_y, 2)).ToString());
-            graphics.FillRectangle(Brushes.Black, new Rectangle(0, 0, work_image.Width, work_image.Height));
-            pictureBox2.Refresh();
+
+            else if (Math.Max(last.X + last.Width, first.X + first.Width) - Math.Min(last.X, first.X) + Math.Max(last.Y + last.Height, first.Y + first.Height) - Math.Min(last.Y, first.Y) < 2 * Int32.Parse(Max_size.Text)) return true;
+            /*
+            if (Math.Sqrt(Math.Pow(first_x - last_x, 2) + Math.Pow(first_y - last_y, 2)) < 90)
+            {
+                Graphics graphics = Graphics.FromImage(pictureBox2.Image);
+                Pen pen = new Pen(Color.Red);
+                pictureBox2.Refresh();
+                graphics.DrawRectangle(pen, first);
+                graphics.DrawRectangle(pen, last);
+                pictureBox2.Refresh();
+                MessageBox.Show((Math.Max(last.X + last.Width, first.X + first.Width) - Math.Min(last.X, first.X) + Math.Max(last.Y + last.Height, first.Y + first.Height) - Math.Min(last.Y, first.Y)).ToString());
+                pictureBox2.Image = (Bitmap)work_mask.Clone();
+                pictureBox2.Refresh();
+            }*/
             return false;
         }
         public void add_claster(Rectangle last, Rectangle neww)

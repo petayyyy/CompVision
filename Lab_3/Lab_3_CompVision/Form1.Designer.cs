@@ -239,7 +239,7 @@
             this.Density.Name = "Density";
             this.Density.Size = new System.Drawing.Size(99, 22);
             this.Density.TabIndex = 35;
-            this.Density.Text = "50";
+            this.Density.Text = "60";
             // 
             // label1
             // 
@@ -300,7 +300,7 @@
             this.Max_size.Name = "Max_size";
             this.Max_size.Size = new System.Drawing.Size(99, 22);
             this.Max_size.TabIndex = 41;
-            this.Max_size.Text = "100";
+            this.Max_size.Text = "90";
             // 
             // label2
             // 
