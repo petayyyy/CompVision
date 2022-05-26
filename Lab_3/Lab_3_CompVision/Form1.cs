@@ -49,7 +49,7 @@ namespace Lab_3_CompVision
         int[] Red_light2 = new int[6] { 90, 220, 15, 55, 20, 65 };
         int[] Red_dark = new int[6] { 55, 100, 0, 15, 0, 20};
         double Grid = 0.0;
-        double len_claster = 50.0;
+        double len_claster = 50.0;  
         bool Open_flag = false;
         List<Rectangle> list_claster = new List<Rectangle>();
         List<int[]> claster_point = new List<int[]>();
@@ -209,7 +209,7 @@ namespace Lab_3_CompVision
                 return new Rectangle (0,0,0,0);
             }
         }
-        public void analize_image(int x, int y, int m = 80, int x2 = 0, int y2 = 0)
+        public void analize_image(int x, int y, int m = 40, int x2 = 0, int y2 = 0)
         {
             Random random = new Random();
             Graphics graphics = Graphics.FromImage(pictureBox2.Image);
@@ -316,8 +316,11 @@ namespace Lab_3_CompVision
             {
                 for (int j = 0; j < rect.Height; j++)
                 {
-                    Color col = ((Bitmap)work_image).GetPixel(rect.X + i, rect.Y + j);
-                    ((Bitmap)pictureBox3.Image).SetPixel(i, j, col);
+                    try {
+                        Color col = ((Bitmap)work_image).GetPixel(rect.X + i, rect.Y + j);
+                        ((Bitmap)pictureBox3.Image).SetPixel(i, j, col);
+                    }
+                    catch{ continue; }
                 }
             }
             pictureBox3.Image = new Bitmap(pictureBox3.Image, 80, 80);
@@ -366,7 +369,7 @@ namespace Lab_3_CompVision
             progressBar1.Maximum = work_image.Width;
             ///////////////////////////////
 
-            analize_image(640, 480, Int32.Parse(Max_size.Text));
+            analize_image(640, 480, Int32.Parse(Max_size.Text)/2);
             /*
             for (int k = 0; k < list_claster.Count; k++)
             {
@@ -376,17 +379,22 @@ namespace Lab_3_CompVision
             MessageBox.Show("");
             */
             int last = 0;
-            for (int u = 0; u < 10; u++)
+            for (int u = 0; u < 5; u++)
             //while (true)
             {
                 last = claster_point.Count;
                 int h = 0;
+                for (int v = 0; v < list_claster.Count; v++)
+                {
+                    list_claster[v] = find_contours(list_claster[v]);
+                    claster_point[v] = new int[] { list_claster[v].X + list_claster[v].Width / 2, list_claster[v].Y + list_claster[v].Height / 2 };
+                }
                 while (h < claster_point.Count)
                 {
-                    list_claster[h] = find_contours(list_claster[h]);
+                    //list_claster[h] = find_contours(list_claster[h]);
                     double ff = counttt(frame, list_claster[h]);
                     //MessageBox.Show(ff.ToString());
-                    if (ff * 100 <= 10)
+                    if (ff * 100 <= 2)
                     {
                         claster_point.RemoveAt(h);
                         list_claster.RemoveAt(h);
@@ -395,7 +403,7 @@ namespace Lab_3_CompVision
                     {
                         if (ff * 100 < Int32.Parse(Density.Text))
                         {
-                            //MessageBox.Show("");
+                            //MessageBox.Show(list_claster.Count().ToString());
                             if ((int)(list_claster[h].Width / list_claster[h].Height) > 1)
                             {
                                 int x_rect = list_claster[h].X;
@@ -411,6 +419,7 @@ namespace Lab_3_CompVision
                                 }
                                 claster_point.RemoveAt(h);
                                 list_claster.RemoveAt(h);
+                                //MessageBox.Show(list_claster.Count().ToString());
                                 //graphics.FillRectangle(Brushes.Black, new Rectangle(0, 0, pictureBox2.Width, pictureBox2.Height));
                                 //analize_image(list_claster[h].X + list_claster[h].Width, list_claster[h].Y + list_claster[h].Height, 50, list_claster[h].X, list_claster[h].Y);
                             }
@@ -670,5 +679,6 @@ namespace Lab_3_CompVision
             }
             pictureBox3.Refresh();
         }
+
     }
 }
