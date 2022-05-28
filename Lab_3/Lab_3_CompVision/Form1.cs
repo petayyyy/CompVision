@@ -190,7 +190,8 @@ namespace Lab_3_CompVision
             int y_max = Math.Max(rect2.Y + rect2.Height, rect.Y + rect.Height);
             //MessageBox.Show((counttt(frame, new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min)) * 100).ToString());
             //return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
-            if (check_density(new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min), (double)(Int32.Parse(Density.Text.ToString())/100)))
+            //if (check_density(new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min), (double)(Int32.Parse(Density.Text.ToString())/100)))
+            if (check_density(new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min), 0.4))
             {
                 return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
             }
@@ -399,7 +400,7 @@ namespace Lab_3_CompVision
             progressBar1.Maximum = work_image.Width;
             ///////////////////////////////
             analize_image(640, 480, 10);
-            find_all_countours(true);
+            //find_all_countours(true);
 
             for (int k = 0; k < list_claster.Count; k++)
             {
@@ -408,6 +409,8 @@ namespace Lab_3_CompVision
             pictureBox2.Refresh();
             MessageBox.Show("");
             clear_mask();
+            graphics = Graphics.FromImage(pictureBox2.Image);
+            pictureBox2.Refresh();
             //////////////////////////
             for (int r = 0; r < 1; r++)
             {
@@ -429,10 +432,13 @@ namespace Lab_3_CompVision
                         }
                         else
                         {
-                            pictureBox2.Update();
+                            clear_mask();
+                            graphics = Graphics.FromImage(pictureBox2.Image);
                             graphics.DrawRectangle(pen, list_claster[i]);
                             graphics.DrawRectangle(pen, list_claster[g]);
                             pictureBox2.Refresh();
+                            //MessageBox.Show("");
+                            //break;
                         }
                         g++;
                     }
@@ -489,10 +495,21 @@ namespace Lab_3_CompVision
             /////////////////////////
             find_all_countours();
             //////////////////////////////////////////
-
-            for (int k = 0; k < list_claster.Count; k++)
+            h = 0;
+            while (h < list_claster.Count)
             {
-                graphics.DrawRectangle(pen, list_claster[k]);
+                //if (list_claster[h].Width < Int32.Parse(Min_size.Text.ToString()) || list_claster[h].Height < Int32.Parse(Min_size.Text.ToString()))
+                //{
+                //    claster_point.RemoveAt(h);
+                //    list_claster.RemoveAt(h);
+                //}
+                //else
+                //{
+                    pictureBox2.Update();
+                    graphics.DrawRectangle(pen, list_claster[h]);
+                    pictureBox2.Refresh();
+                    h++;
+               // }
             }
             pictureBox2.Refresh();
             pictureBox1.Refresh();
@@ -511,12 +528,12 @@ namespace Lab_3_CompVision
             int first_y = first.Y + first.Height / 2;
             int last_x = last.X + last.Width / 2;
             int last_y = last.Y + last.Height / 2;
-            double len = (double)(Math.Sqrt(Math.Pow(first.Width / 2, 2) + Math.Pow(first.Height / 2, 2)) + Math.Sqrt(Math.Pow(last.Width / 2, 2) + Math.Pow(last.Height / 2, 2)))/2;
-            if ((last.X <= first_x && first_x <= last.X + last.Width) && (last.Y <= first_y && first_y <= last.Y + last.Height)) return true;
-            else if ((first.X <= last_x && last_x <= first.X + first.Width) && (first.Y <= last_y && last_y <= first.Y + first.Height)) return true;
-            else if (Math.Sqrt(Math.Pow(first_x - last_x, 2) + Math.Pow(first_y - last_y, 2)) < (double)(len*2)) return true;
+            //double len = (double)(Math.Sqrt(Math.Pow(first.Width / 2, 2) + Math.Pow(first.Height / 2, 2)) + Math.Sqrt(Math.Pow(last.Width / 2, 2) + Math.Pow(last.Height / 2, 2)))/2;
+            //if ((last.X <= first_x && first_x <= last.X + last.Width) && (last.Y <= first_y && first_y <= last.Y + last.Height)) return true;
+            //else if ((first.X <= last_x && last_x <= first.X + first.Width) && (first.Y <= last_y && last_y <= first.Y + first.Height)) return true;
+            //else if (Math.Sqrt(Math.Pow(first_x - last_x, 2) + Math.Pow(first_y - last_y, 2)) < (double)(len*2)) return true;
             
-            else if ( (first.X >= last.X && first.X <= last.X + last.Width) && (first.Y >= last.Y && first.Y <= last.Y + last.Height) ) return true;
+            if ( (first.X >= last.X && first.X <= last.X + last.Width) && (first.Y >= last.Y && first.Y <= last.Y + last.Height) ) return true;
             else if ((first.X + first.Width >= last.X && first.X + first.Width <= last.X + last.Width) && (first.Y >= last.Y && first.Y <= last.Y + last.Height)) return true;
             else if ((first.X >= last.X && first.X <= last.X + last.Width) && (first.Y + first.Height >= last.Y && first.Y + first.Height <= last.Y + last.Height)) return true;
             else if ((first.X + first.Width >= last.X && first.X + first.Width  <= last.X + last.Width) && (first.Y + first.Height >= last.Y && first.Y + first.Height <= last.Y + last.Height)) return true;
@@ -527,19 +544,7 @@ namespace Lab_3_CompVision
             else if ((last.X + last.Width >= first.X && last.X + last.Width <= first.X + first.Width) && (last.Y + last.Height >= first.Y && last.Y + last.Height <= first.Y + first.Height)) return true;
 
             //else if (Math.Max(last.X + last.Width, first.X + first.Width) - Math.Min(last.X, first.X) + Math.Max(last.Y + last.Height, first.Y + first.Height) - Math.Min(last.Y, first.Y) < 2 * Int32.Parse(Max_size.Text)) return true;
-            /*
-            if (Math.Sqrt(Math.Pow(first_x - last_x, 2) + Math.Pow(first_y - last_y, 2)) < 90)
-            {
-                Graphics graphics = Graphics.FromImage(pictureBox2.Image);
-                Pen pen = new Pen(Color.Red);
-                pictureBox2.Refresh();
-                graphics.DrawRectangle(pen, first);
-                graphics.DrawRectangle(pen, last);
-                pictureBox2.Refresh();
-                MessageBox.Show((Math.Max(last.X + last.Width, first.X + first.Width) - Math.Min(last.X, first.X) + Math.Max(last.Y + last.Height, first.Y + first.Height) - Math.Min(last.Y, first.Y)).ToString());
-                pictureBox2.Image = (Bitmap)work_mask.Clone();
-                pictureBox2.Refresh();
-            }*/
+            
             return false;
         }
         public void add_claster(Rectangle last, Rectangle neww)
