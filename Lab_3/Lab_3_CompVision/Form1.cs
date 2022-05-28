@@ -82,7 +82,7 @@ namespace Lab_3_CompVision
             pictureBox1.Refresh();
             pictureBox2.Refresh();
         }
-        public bool check_density(Rectangle rect)
+        public bool check_density(Rectangle rect, double d=0.50)
         {
             int[] sum = new int[2] { 0, 0 };
             for (int i=rect.X; i<rect.X+rect.Width && i < work_image.Width ; i++)
@@ -93,7 +93,7 @@ namespace Lab_3_CompVision
                     sum[1]++;
                 }
             }
-            if ((double)sum[0] / sum[1] > 0.50) return true;
+            if ((double)sum[0] / sum[1] > d) return true;
             return false;
         }
         public void view_claster()
@@ -190,7 +190,7 @@ namespace Lab_3_CompVision
             int y_max = Math.Max(rect2.Y + rect2.Height, rect.Y + rect.Height);
             //MessageBox.Show((counttt(frame, new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min)) * 100).ToString());
             //return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
-            if (counttt(frame, new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min))*100 >= Int32.Parse(Density.Text.ToString()))
+            if (check_density(new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min), (double)(Int32.Parse(Density.Text.ToString())/100)))
             {
                 return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
             }
@@ -319,7 +319,7 @@ namespace Lab_3_CompVision
             pictureBox3.Size = new Size(80, 80);
             pictureBox3.Refresh();
         }
-        public void find_all_countours()
+        public void find_all_countours(bool flag = false, double d = 0.1)
         {
             int v = 0;
             for (int u = 0; u < 2; u++)
@@ -327,15 +327,31 @@ namespace Lab_3_CompVision
                 while (v < list_claster.Count)
                 {
                     list_claster[v] = find_contours(list_claster[v]);
-                    if (list_claster[v].Width != 0 && list_claster[v].Height != 0)
+                    if (flag)
                     {
-                        claster_point[v] = new int[] { list_claster[v].X + list_claster[v].Width / 2, list_claster[v].Y + list_claster[v].Height / 2 };
-                        v++;
+                        if (list_claster[v].Width != 0 && list_claster[v].Height != 0 || check_density(list_claster[v], d))
+                        {
+                            claster_point[v] = new int[] { list_claster[v].X + list_claster[v].Width / 2, list_claster[v].Y + list_claster[v].Height / 2 };
+                            v++;
+                        }
+                        else
+                        {
+                            claster_point.RemoveAt(v);
+                            list_claster.RemoveAt(v);
+                        }
                     }
                     else
                     {
-                        claster_point.RemoveAt(v);
-                        list_claster.RemoveAt(v);
+                        if (list_claster[v].Width != 0 && list_claster[v].Height != 0)
+                        {
+                            claster_point[v] = new int[] { list_claster[v].X + list_claster[v].Width / 2, list_claster[v].Y + list_claster[v].Height / 2 };
+                            v++;
+                        }
+                        else
+                        {
+                            claster_point.RemoveAt(v);
+                            list_claster.RemoveAt(v);
+                        }
                     }
                 }
             }
@@ -382,9 +398,16 @@ namespace Lab_3_CompVision
             pictureBox2.Refresh(); 
             progressBar1.Maximum = work_image.Width;
             ///////////////////////////////
-            analize_image(640, 480, 30);
-            find_all_countours();
-            
+            analize_image(640, 480, 10);
+            find_all_countours(true);
+
+            for (int k = 0; k < list_claster.Count; k++)
+            {
+                graphics.DrawRectangle(pen, list_claster[k]);
+            }
+            pictureBox2.Refresh();
+            MessageBox.Show("");
+            clear_mask();
             //////////////////////////
             for (int r = 0; r < 1; r++)
             {
@@ -404,6 +427,13 @@ namespace Lab_3_CompVision
                                 g--;
                             }
                         }
+                        else
+                        {
+                            pictureBox2.Update();
+                            graphics.DrawRectangle(pen, list_claster[i]);
+                            graphics.DrawRectangle(pen, list_claster[g]);
+                            pictureBox2.Refresh();
+                        }
                         g++;
                     }
                 }
@@ -412,6 +442,7 @@ namespace Lab_3_CompVision
             find_all_countours();
             //////////////////////////////
             int h = 0;
+            /*
             while (h < list_claster.Count)
             {
                 double ff = counttt(frame, list_claster[h]);
@@ -454,11 +485,11 @@ namespace Lab_3_CompVision
                 }
                 h++;
             }
+            */
             /////////////////////////
             find_all_countours();
             //////////////////////////////////////////
 
-            if (list_claster.Count == 1 && list_claster[0].Height + list_claster[0].Width < 2 * Int32.Parse(Min_size.Text)) list_claster.Clear();
             for (int k = 0; k < list_claster.Count; k++)
             {
                 graphics.DrawRectangle(pen, list_claster[k]);
@@ -469,6 +500,11 @@ namespace Lab_3_CompVision
             view_claster();
             return list_claster.Count;
         }
+        public void clear_mask()
+        {
+            pictureBox2.Image = (Bitmap)work_mask.Clone();
+            pictureBox2.Refresh();
+        }
         public bool check_claster(Rectangle first, Rectangle last)
         {           
             int first_x = first.X + first.Width / 2;
@@ -478,7 +514,7 @@ namespace Lab_3_CompVision
             double len = (double)(Math.Sqrt(Math.Pow(first.Width / 2, 2) + Math.Pow(first.Height / 2, 2)) + Math.Sqrt(Math.Pow(last.Width / 2, 2) + Math.Pow(last.Height / 2, 2)))/2;
             if ((last.X <= first_x && first_x <= last.X + last.Width) && (last.Y <= first_y && first_y <= last.Y + last.Height)) return true;
             else if ((first.X <= last_x && last_x <= first.X + first.Width) && (first.Y <= last_y && last_y <= first.Y + first.Height)) return true;
-            else if (Math.Sqrt(Math.Pow(first_x - last_x, 2) + Math.Pow(first_y - last_y, 2)) < (double)(len*1.5)) return true;
+            else if (Math.Sqrt(Math.Pow(first_x - last_x, 2) + Math.Pow(first_y - last_y, 2)) < (double)(len*2)) return true;
             
             else if ( (first.X >= last.X && first.X <= last.X + last.Width) && (first.Y >= last.Y && first.Y <= last.Y + last.Height) ) return true;
             else if ((first.X + first.Width >= last.X && first.X + first.Width <= last.X + last.Width) && (first.Y >= last.Y && first.Y <= last.Y + last.Height)) return true;
@@ -490,7 +526,7 @@ namespace Lab_3_CompVision
             else if ((last.X >= first.X && last.X <= first.X + first.Width) && (last.Y + last.Height >= first.Y && last.Y + last.Height <= first.Y + first.Height)) return true;
             else if ((last.X + last.Width >= first.X && last.X + last.Width <= first.X + first.Width) && (last.Y + last.Height >= first.Y && last.Y + last.Height <= first.Y + first.Height)) return true;
 
-            else if (Math.Max(last.X + last.Width, first.X + first.Width) - Math.Min(last.X, first.X) + Math.Max(last.Y + last.Height, first.Y + first.Height) - Math.Min(last.Y, first.Y) < 2 * Int32.Parse(Max_size.Text)) return true;
+            //else if (Math.Max(last.X + last.Width, first.X + first.Width) - Math.Min(last.X, first.X) + Math.Max(last.Y + last.Height, first.Y + first.Height) - Math.Min(last.Y, first.Y) < 2 * Int32.Parse(Max_size.Text)) return true;
             /*
             if (Math.Sqrt(Math.Pow(first_x - last_x, 2) + Math.Pow(first_y - last_y, 2)) < 90)
             {
