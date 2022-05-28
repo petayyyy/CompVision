@@ -318,7 +318,7 @@
             this.Min_size.Name = "Min_size";
             this.Min_size.Size = new System.Drawing.Size(99, 22);
             this.Min_size.TabIndex = 43;
-            this.Min_size.Text = "20";
+            this.Min_size.Text = "15";
             // 
             // label9
             // 

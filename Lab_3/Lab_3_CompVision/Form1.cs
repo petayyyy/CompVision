@@ -191,15 +191,15 @@ namespace Lab_3_CompVision
             //MessageBox.Show((counttt(frame, new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min)) * 100).ToString());
             //return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
             //if (check_density(new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min), (double)(Int32.Parse(Density.Text.ToString())/100)))
-            if (check_density(new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min), 0.4))
-            {
+            //if (check_density(new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min), 0.4))
+            //{
                 return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
-            }
-            else if (rect.Width+rect.Height > rect2.Height+ rect2.Width)
-            {
-                return rect;
-            }
-            return rect2;
+            //}
+            //else if (rect.Width+rect.Height > rect2.Height+ rect2.Width)
+            //{
+            //    return rect;
+            //}
+            //return rect2;
             
         }
         public void analize_image(int x, int y, int m = 40, int x2 = 0, int y2 = 0)
@@ -263,29 +263,100 @@ namespace Lab_3_CompVision
         public Rectangle find_contours(Rectangle rect)
         {
             int x = 1000 , y = 1000;
-            int h = 0, w = 0;
-            for (int i = rect.X; i < rect.X+rect.Width; i++)
+            int h = 0, w = 0;  
+            for (int i = rect.X+2; i < rect.X+rect.Width-2; i++)
             {
-                for(int j = rect.Y; j < rect.Y+ rect.Height; j++)
+                for (int j = rect.Y+2; j < rect.Y + rect.Height-2; j++)
                 {
-                    if (i < x)
-                    {
-                        x = i;
-                    }
-                    else if (i > w)
-                    {
-                        w = i;
-                    }
-                    if (j < y)
-                    {
-                        y = j;
-                    }
-                    else if (j > h)
-                    {
-                        h = j;
+                    if (frame[i,j] == 1) {
+                        if (i < x)
+                        {
+                            x = i;
+                        }
+                        else if (i > w)
+                        {
+                            w = i;
+                        }
+                        if (j < y)
+                        {
+                            y = j;
+                        }
+                        else if (j > h)
+                        {
+                            h = j;
+                        }
                     }
                 }
             }
+            if (x == 1000 || y == 1000) return new Rectangle(0,0,0,0);
+            else
+            {
+                bool flag = true;
+                bool exit = true;
+                while (x < 639 && x > 0  && w < 639 && w > 0 && exit)
+                {
+                    x--;
+                    flag = true;
+                    for (int i=y; i < h && i < 480; i++)
+                    {
+                        if (frame[x,i] == 1)
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) exit = false;                    
+                }
+                flag = true;
+                exit = true;
+                while (x < 639 && x > 0 && w < 639 && w > 0 && exit)
+                {
+                    w++;
+                    flag = true;
+                    for (int i = y; i < h && i < 480; i++)
+                    {
+                        if (frame[w, i] == 1)
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) exit = false;
+                }
+                flag = true;
+                exit = true;
+                while (y < 479 && y > 0 && h < 479 && h > 0 && exit)
+                {
+                    y--;
+                    flag = true;
+                    for (int i = x; i < w && i < 640; i++)
+                    {
+                        if (frame[i, y] == 1)
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) exit = false;
+                }
+                flag = true;
+                exit = true;
+                while (y < 479 && y > 0 && h < 479 && h > 0 && exit)
+                {
+                    h++;
+                    flag = true;
+                    for (int i = x; i < w && i < 640; i++)
+                    {
+                        if (frame[i, h] == 1)
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) exit = false;
+                }
+            }
+            MessageBox.Show("");
             return new Rectangle(x, y, w-x, h-y);
         }
         public Rectangle sum_clast (int x, int y, Rectangle rect)
@@ -303,22 +374,27 @@ namespace Lab_3_CompVision
         }
         public void resize(Rectangle rect)
         {
-            pictureBox3.Size = new Size(rect.Width, rect.Height);
-            pictureBox3.Image = new Bitmap(rect.Width, rect.Height);
-            for (int i = 0; i < rect.Width; i++)
+            try
             {
-                for (int j = 0; j < rect.Height; j++)
+                pictureBox3.Size = new Size(rect.Width, rect.Height);
+                pictureBox3.Image = new Bitmap(rect.Width, rect.Height);
+                for (int i = 0; i < rect.Width; i++)
                 {
-                    try {
-                        Color col = ((Bitmap)work_image).GetPixel(rect.X + i, rect.Y + j);
-                        ((Bitmap)pictureBox3.Image).SetPixel(i, j, col);
+                    for (int j = 0; j < rect.Height; j++)
+                    {
+                        try
+                        {
+                            Color col = ((Bitmap)work_image).GetPixel(rect.X + i, rect.Y + j);
+                            ((Bitmap)pictureBox3.Image).SetPixel(i, j, col);
+                        }
+                        catch { continue; }
                     }
-                    catch{ continue; }
                 }
+                pictureBox3.Image = new Bitmap(pictureBox3.Image, 80, 80);
+                pictureBox3.Size = new Size(80, 80);
+                pictureBox3.Refresh();
             }
-            pictureBox3.Image = new Bitmap(pictureBox3.Image, 80, 80);
-            pictureBox3.Size = new Size(80, 80);
-            pictureBox3.Refresh();
+            catch { }
         }
         public void find_all_countours(bool flag = false, double d = 0.1)
         {
@@ -412,7 +488,7 @@ namespace Lab_3_CompVision
             graphics = Graphics.FromImage(pictureBox2.Image);
             pictureBox2.Refresh();
             //////////////////////////
-            for (int r = 0; r < 1; r++)
+            for (int r = 0; r < 2; r++)
             {
                 for (int i = 0; i < list_claster.Count; i++)
                 {
@@ -498,18 +574,18 @@ namespace Lab_3_CompVision
             h = 0;
             while (h < list_claster.Count)
             {
-                //if (list_claster[h].Width < Int32.Parse(Min_size.Text.ToString()) || list_claster[h].Height < Int32.Parse(Min_size.Text.ToString()))
-                //{
-                //    claster_point.RemoveAt(h);
-                //    list_claster.RemoveAt(h);
-                //}
-                //else
-                //{
+                if (list_claster[h].Width < Int32.Parse(Min_size.Text.ToString()) || list_claster[h].Height < Int32.Parse(Min_size.Text.ToString()))
+                {
+                    claster_point.RemoveAt(h);
+                    list_claster.RemoveAt(h);
+                }
+                else
+                {
                     pictureBox2.Update();
                     graphics.DrawRectangle(pen, list_claster[h]);
                     pictureBox2.Refresh();
                     h++;
-               // }
+                }
             }
             pictureBox2.Refresh();
             pictureBox1.Refresh();
