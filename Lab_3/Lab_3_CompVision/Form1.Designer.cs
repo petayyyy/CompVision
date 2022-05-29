@@ -58,6 +58,8 @@
             this.label9 = new System.Windows.Forms.Label();
             this.Open_sahblon_but = new System.Windows.Forms.Button();
             this.Start_anal_but = new System.Windows.Forms.Button();
+            this.Result = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -99,7 +101,7 @@
             this.pictureBox2.Location = new System.Drawing.Point(1039, 10);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(569, 384);
+            this.pictureBox2.Size = new System.Drawing.Size(716, 469);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 2;
             this.pictureBox2.TabStop = false;
@@ -229,7 +231,7 @@
             this.progressBar1.Location = new System.Drawing.Point(11, 743);
             this.progressBar1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(1689, 54);
+            this.progressBar1.Size = new System.Drawing.Size(1744, 54);
             this.progressBar1.TabIndex = 33;
             // 
             // Density
@@ -253,7 +255,7 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(1160, 429);
+            this.dataGridView1.Location = new System.Drawing.Point(1039, 505);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -278,7 +280,7 @@
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.pictureBox3.Location = new System.Drawing.Point(156, 606);
+            this.pictureBox3.Location = new System.Drawing.Point(247, 615);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(130, 113);
             this.pictureBox3.TabIndex = 38;
@@ -287,7 +289,7 @@
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.pictureBox4.Location = new System.Drawing.Point(329, 606);
+            this.pictureBox4.Location = new System.Drawing.Point(420, 615);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(130, 113);
             this.pictureBox4.TabIndex = 39;
@@ -332,7 +334,7 @@
             // Open_sahblon_but
             // 
             this.Open_sahblon_but.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Open_sahblon_but.Location = new System.Drawing.Point(505, 666);
+            this.Open_sahblon_but.Location = new System.Drawing.Point(596, 675);
             this.Open_sahblon_but.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Open_sahblon_but.Name = "Open_sahblon_but";
             this.Open_sahblon_but.Size = new System.Drawing.Size(105, 54);
@@ -344,7 +346,7 @@
             // Start_anal_but
             // 
             this.Start_anal_but.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Start_anal_but.Location = new System.Drawing.Point(505, 606);
+            this.Start_anal_but.Location = new System.Drawing.Point(596, 615);
             this.Start_anal_but.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Start_anal_but.Name = "Start_anal_but";
             this.Start_anal_but.Size = new System.Drawing.Size(105, 54);
@@ -353,12 +355,31 @@
             this.Start_anal_but.UseVisualStyleBackColor = false;
             this.Start_anal_but.Click += new System.EventHandler(this.Start_anal_but_Click);
             // 
+            // Result
+            // 
+            this.Result.Location = new System.Drawing.Point(740, 666);
+            this.Result.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Result.Name = "Result";
+            this.Result.Size = new System.Drawing.Size(246, 22);
+            this.Result.TabIndex = 47;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(737, 648);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(45, 16);
+            this.label10.TabIndex = 46;
+            this.label10.Text = "Result";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
-            this.ClientSize = new System.Drawing.Size(1587, 731);
+            this.ClientSize = new System.Drawing.Size(1767, 808);
+            this.Controls.Add(this.Result);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.Start_anal_but);
             this.Controls.Add(this.Open_sahblon_but);
             this.Controls.Add(this.Min_size);
@@ -433,6 +454,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button Open_sahblon_but;
         private System.Windows.Forms.Button Start_anal_but;
+        private System.Windows.Forms.TextBox Result;
+        private System.Windows.Forms.Label label10;
     }
 }
 

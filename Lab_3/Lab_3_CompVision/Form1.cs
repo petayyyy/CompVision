@@ -33,8 +33,8 @@ namespace Lab_3_CompVision
             dataGridView1.Columns[3].HeaderText = "Height";
             dataGridView1.Columns[3].Width = 100;
             dataGridView1.Columns[4].HeaderText = "Density";
-            dataGridView1.Columns[4].Width = 100;
-            dataGridView1.Width = 500;
+            dataGridView1.Columns[4].Width = 140;
+            dataGridView1.Width = 540;
         }
         Image work_image = new Bitmap(640, 480);
         Image work_mask = new Bitmap(640, 480);
@@ -559,13 +559,13 @@ namespace Lab_3_CompVision
             pictureBox1.Refresh();
             graphics = Graphics.FromImage(pictureBox3.Image);
             graphics.FillRectangle(Brushes.White, new Rectangle(0, 0, pictureBox3.Width, pictureBox3.Height));
-            graphics = Graphics.FromImage(pictureBox4.Image);
-            graphics.FillRectangle(Brushes.White, new Rectangle(0, 0, pictureBox4.Width, pictureBox4.Height));
+            //graphics = Graphics.FromImage(pictureBox4.Image);
+            //graphics.FillRectangle(Brushes.White, new Rectangle(0, 0, pictureBox4.Width, pictureBox4.Height));
 
             pictureBox3 = resize(list_claster[e.RowIndex], pictureBox3, work_image);
 
             pictureBox3.Refresh();
-            pictureBox4.Refresh();
+//            pictureBox4.Refresh();
         }
         private void Start_col_but_Click(object sender, EventArgs e)
         {
@@ -645,12 +645,12 @@ namespace Lab_3_CompVision
                                 shablon_80[i, j] = 1;
                                 if (first == -1) first = j;
                                 last = j;
-                                ((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.White);
+                                //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.White);
                             }
                             else
                             {
                                 shablon_80[i, j] = 0;
-                                ((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.Black);
+                                //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.Black);
                             }
                         }
                         else
@@ -676,18 +676,8 @@ namespace Lab_3_CompVision
                         int r = 255;
                         int g = 255;
                         int b = 255;
-
-                        if (frame_80[i, j] == 1 && (contur[0,i] > j || contur[1, i] < j))
-                        {
-                            // Blue
-                            r = 0; g = 0;
-                        }
-                        else if (frame_80[i, j] == 0 && (contur[0, i] > j || contur[1, i] < j))
-                        {
-                            // Dark Blue
-                            r = 0; g = 0; b = 120;
-                        }
-                        else if (frame_80[i, j] == 1 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
+                        
+                        if (frame_80[i, j] == 1 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
                         {
                             // Green
                             r = 0; b = 0;
@@ -705,16 +695,26 @@ namespace Lab_3_CompVision
                             g = 0; b = 0;
                             count_incorrect++;
                         }
-                        else if (frame_80[i, j] == 0 && frame_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
+                        else if (frame_80[i, j] == 0 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
                         {
                             // Dark Red
                             r = 120; g = 0; b = 0;
                             count_incorrect++;
                         }
+                        else if (frame_80[i, j] == 1 && (contur[0, i] > j || contur[1, i] < j))
+                        {
+                            // Blue
+                            r = 0; g = 0;
+                        }
+                        else if (frame_80[i, j] == 0 && (contur[0, i] > j || contur[1, i] < j))
+                        {
+                            // Dark Blue
+                            r = 0; g = 0; b = 120;
+                        }
                         ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.FromArgb(r, g, b));
                     }
                 }
-                MessageBox.Show((((double)count_correct/(count_incorrect + count_correct))*100).ToString());
+                Result.Text = "Images match on - " + Math.Round(((double)count_correct / (count_incorrect + count_correct)) * 100,2).ToString();
                 pictureBox3.Refresh();
                 pictureBox4.Refresh();
             }
