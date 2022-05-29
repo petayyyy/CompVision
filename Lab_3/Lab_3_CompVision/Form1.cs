@@ -28,9 +28,9 @@ namespace Lab_3_CompVision
             dataGridView1.Columns[0].Width = 100;
             dataGridView1.Columns[1].HeaderText = "Y";
             dataGridView1.Columns[1].Width = 100;
-            dataGridView1.Columns[2].HeaderText = "Height";
+            dataGridView1.Columns[2].HeaderText = "Width";
             dataGridView1.Columns[2].Width = 100;
-            dataGridView1.Columns[3].HeaderText = "Width";
+            dataGridView1.Columns[3].HeaderText = "Height";
             dataGridView1.Columns[3].Width = 100;
             dataGridView1.Columns[4].HeaderText = "Density";
             dataGridView1.Columns[4].Width = 100;
@@ -188,19 +188,7 @@ namespace Lab_3_CompVision
             int y_min = Math.Min(rect2.Y, rect.Y);
             int x_max = Math.Max(rect2.X + rect2.Width, rect.X + rect.Width);
             int y_max = Math.Max(rect2.Y + rect2.Height, rect.Y + rect.Height);
-            //MessageBox.Show((counttt(frame, new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min)) * 100).ToString());
-            //return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
-            //if (check_density(new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min), (double)(Int32.Parse(Density.Text.ToString())/100)))
-            //if (check_density(new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min), 0.4))
-            //{
-                return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);
-            //}
-            //else if (rect.Width+rect.Height > rect2.Height+ rect2.Width)
-            //{
-            //    return rect;
-            //}
-            //return rect2;
-            
+            return new Rectangle(x_min, y_min, x_max - x_min, y_max - y_min);            
         }
         public void analize_image(int x, int y, int m = 40, int x2 = 0, int y2 = 0)
         {
@@ -260,7 +248,7 @@ namespace Lab_3_CompVision
             pictureBox2.Refresh();
             //MessageBox.Show("");
         }
-        public Rectangle find_contours(Rectangle rect)
+        public Rectangle find_contours(Rectangle rect, bool is_exit=false)
         {
             int x = 1000 , y = 1000;
             int h = 0, w = 0;  
@@ -289,23 +277,23 @@ namespace Lab_3_CompVision
                 }
             }
             if (x == 1000 || y == 1000) return new Rectangle(0,0,0,0);
-            else
+            if (!is_exit)
             {
                 bool flag = true;
                 bool exit = true;
-                while (x < 639 && x > 0  && w < 639 && w > 0 && exit)
+                while (x < 639 && x > 0 && w < 639 && w > 0 && exit)
                 {
                     x--;
                     flag = true;
-                    for (int i=y; i < h && i < 480; i++)
+                    for (int i = y; i < h && i < 480; i++)
                     {
-                        if (frame[x,i] == 1)
+                        if (frame[x, i] == 1)
                         {
                             flag = false;
                             break;
                         }
                     }
-                    if (flag) exit = false;                    
+                    if (flag) exit = false;
                 }
                 flag = true;
                 exit = true;
@@ -366,9 +354,12 @@ namespace Lab_3_CompVision
             int y_max = Math.Max(y, rect.Y + rect.Height);
             return new Rectangle(x_min, y_min, x_max-x_min, y_max-y_min);
         }
-        public bool in_rect (int x, int y, Rectangle rect)
+        public bool in_rect (Rectangle reeect, Rectangle rect)
         {
-            if (rect.X <= x && x <= rect.X+rect.Width && rect.Y <= y && y <= rect.Y + rect.Height) return true;
+            if (rect.X < reeect.X && reeect.X < rect.X+rect.Width && rect.Y < reeect.Y && reeect.Y < rect.Y + rect.Height                                 &&
+                rect.X < reeect.X+reeect.Width && reeect.X + reeect.Width < rect.X + rect.Width && rect.Y < reeect.Y && reeect.Y < rect.Y + rect.Height   &&
+                rect.X < reeect.X && reeect.X < rect.X + rect.Width && rect.Y < reeect.Y+reeect.Height && reeect.Y + reeect.Height < rect.Y + rect.Height &&
+                rect.X < reeect.X + reeect.Width && reeect.X + reeect.Width < rect.X + rect.Width && rect.Y < reeect.Y + reeect.Height && reeect.Y + reeect.Height < rect.Y + rect.Height) return true;
             return false;
         }
         public void resize(Rectangle rect)
@@ -475,108 +466,103 @@ namespace Lab_3_CompVision
             progressBar1.Maximum = work_image.Width;
             ///////////////////////////////
             analize_image(640, 480, 10);
-            //find_all_countours(true);
-
-            for (int k = 0; k < list_claster.Count; k++)
+            //////////////////////////
+            for (int i = 0; i < list_claster.Count; i++)
             {
-                graphics.DrawRectangle(pen, list_claster[k]);
+                int g = i+1;
+                while (g < list_claster.Count)
+                {
+                    if (check_claster(list_claster[i], list_claster[g]))
+                    {
+                        Rectangle rect = sum_clasters_by_two(list_claster[i], list_claster[g]);
+                        if (rect.Height != 0)
+                        {
+                            list_claster[i] = rect;
+                            list_claster.RemoveAt(g);
+                            claster_point.RemoveAt(g);
+                            g--;
+                        }
+                    }
+                    else break;
+                    g++;
+                }
+            }
+            /////////////////////////
+            find_all_countours();
+            find_all_countours();
+            int h = 0;
+            while (h < list_claster.Count)
+            {
+                pictureBox2.Update();
+                graphics.DrawRectangle(pen, list_claster[h]);
+                pictureBox2.Refresh();
+                h++;
             }
             pictureBox2.Refresh();
             MessageBox.Show("");
             clear_mask();
             graphics = Graphics.FromImage(pictureBox2.Image);
-            pictureBox2.Refresh();
-            //////////////////////////
-            for (int r = 0; r < 1; r++)
-            {
-                for (int i = 0; i < list_claster.Count; i++)
-                {
-                    int g = i+1;
-                    while (g < list_claster.Count)
-                    {
-                        if (check_claster(list_claster[i], list_claster[g]))
-                        {
-                            Rectangle rect = sum_clasters_by_two(list_claster[i], list_claster[g]);
-                            if (rect.Height != 0)
-                            {
-                                list_claster[i] = rect;
-                                list_claster.RemoveAt(g);
-                                claster_point.RemoveAt(g);
-                                g--;
-                            }
-                        }
-                        else
-                        {
-                            //clear_mask();
-                            //graphics = Graphics.FromImage(pictureBox2.Image);
-                            //graphics.DrawRectangle(pen, list_claster[i]);
-                            //graphics.DrawRectangle(pen, list_claster[g]);
-                            //pictureBox2.Refresh();
-                            //MessageBox.Show("");
-                            break;
-                        }
-                        g++;
-                    }
-                }
-            }
-            /////////////////////////
-            find_all_countours();
             //////////////////////////////
-            int h = 0;
-            /*for (int r = 0; r < 1; r++)
+            for (int i = 0; i < list_claster.Count; i++)
             {
-                for (int i = 0; i < list_claster.Count; i++)
+                int g = 0;
+                while (g < list_claster.Count && i < list_claster.Count)
                 {
-                    int g = i + 1;
-                    while (g < list_claster.Count)
+                    if (g != i)
                     {
-                        if (check_claster(list_claster[i], list_claster[g]))
+                        if (list_claster[i].X == list_claster[g].X && list_claster[i].Y == list_claster[g].Y)
                         {
-                            Rectangle rect = sum_clasters_by_two(list_claster[i], list_claster[g]);
-                            if (rect.Height != 0)
+                            list_claster.RemoveAt(g);
+                            claster_point.RemoveAt(g);
+                            g--;
+                        }
+                        else if ((list_claster[i].Width + list_claster[i].X) == (list_claster[g].Width + list_claster[g].X) && (list_claster[i].Height + list_claster[i].Y) == (list_claster[g].Height + list_claster[g].Y) ||
+                            (list_claster[i].Width + list_claster[i].X) == (list_claster[g].Width + list_claster[g].X) && (list_claster[i].Y) == (list_claster[g].Y))
+                        {
+                            if (list_claster[i].Width + list_claster[i].Height > list_claster[g].Width + list_claster[g].Height)
                             {
-                                list_claster[i] = rect;
+                                list_claster.RemoveAt(i);
+                                claster_point.RemoveAt(i);
+                            }
+                            else
+                            {
                                 list_claster.RemoveAt(g);
                                 claster_point.RemoveAt(g);
                                 g--;
                             }
                         }
-                        else
+                        else if (check_claster(list_claster[i], list_claster[g]))
                         {
-                            //clear_mask();
-                            //graphics = Graphics.FromImage(pictureBox2.Image);
-                            //graphics.DrawRectangle(pen, list_claster[i]);
-                            //graphics.DrawRectangle(pen, list_claster[g]);
-                            //pictureBox2.Refresh();
-                            //MessageBox.Show("");
-                            //break;
+                            if (list_claster[i].Width + list_claster[i].Height > list_claster[g].Width + list_claster[g].Height)
+                            {
+                                list_claster.RemoveAt(g);
+                                claster_point.RemoveAt(g);
+                                g--;
+                            }
+                            else
+                            {
+                                list_claster.RemoveAt(i);
+                                claster_point.RemoveAt(i);
+                            }
                         }
-                        g++;
+                        else if (in_rect(list_claster[g], list_claster[i]))
+                        {
+                            list_claster.RemoveAt(g);
+                            claster_point.RemoveAt(g);
+                            g--;
+                        }
+                        if (list_claster[g].Width < Int32.Parse(Min_size.Text.ToString()) || list_claster[g].Height < Int32.Parse(Min_size.Text.ToString()) ||
+                            list_claster[g].Width > Int32.Parse(Max_size.Text.ToString()) || list_claster[g].Height > Int32.Parse(Max_size.Text.ToString()))
+                        {
+                            list_claster.RemoveAt(g);
+                            claster_point.RemoveAt(g);
+                            g--;
+                        }   
                     }
+                    g++;
                 }
-            }*/
-            /////////////////////////
-            find_all_countours();
+            }            
             //////////////////////////////////////////
-            h = 0;
-            while (h < list_claster.Count)
-            {
-                if (list_claster[h].Width < Int32.Parse(Min_size.Text.ToString()) || list_claster[h].Height < Int32.Parse(Min_size.Text.ToString()))
-                {
-                    claster_point.RemoveAt(h);
-                    list_claster.RemoveAt(h);
-                }
-                else
-                {
-                    pictureBox2.Update();
-                    graphics.DrawRectangle(pen, list_claster[h]);
-                    pictureBox2.Refresh();
-                    h++;
-                }
-            }
-            pictureBox2.Refresh();
-            pictureBox1.Refresh();
-
             view_claster();
             return list_claster.Count;
         }
