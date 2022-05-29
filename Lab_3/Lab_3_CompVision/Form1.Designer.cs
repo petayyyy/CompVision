@@ -278,18 +278,18 @@
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.pictureBox3.Location = new System.Drawing.Point(1039, 429);
+            this.pictureBox3.Location = new System.Drawing.Point(156, 606);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(105, 98);
+            this.pictureBox3.Size = new System.Drawing.Size(130, 113);
             this.pictureBox3.TabIndex = 38;
             this.pictureBox3.TabStop = false;
             // 
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.pictureBox4.Location = new System.Drawing.Point(1039, 536);
+            this.pictureBox4.Location = new System.Drawing.Point(329, 606);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(105, 98);
+            this.pictureBox4.Size = new System.Drawing.Size(130, 113);
             this.pictureBox4.TabIndex = 39;
             this.pictureBox4.TabStop = false;
             // 
@@ -300,7 +300,7 @@
             this.Max_size.Name = "Max_size";
             this.Max_size.Size = new System.Drawing.Size(99, 22);
             this.Max_size.TabIndex = 41;
-            this.Max_size.Text = "90";
+            this.Max_size.Text = "105";
             // 
             // label2
             // 
@@ -332,7 +332,7 @@
             // Open_sahblon_but
             // 
             this.Open_sahblon_but.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Open_sahblon_but.Location = new System.Drawing.Point(1039, 639);
+            this.Open_sahblon_but.Location = new System.Drawing.Point(505, 666);
             this.Open_sahblon_but.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Open_sahblon_but.Name = "Open_sahblon_but";
             this.Open_sahblon_but.Size = new System.Drawing.Size(105, 54);
@@ -344,7 +344,7 @@
             // Start_anal_but
             // 
             this.Start_anal_but.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Start_anal_but.Location = new System.Drawing.Point(928, 639);
+            this.Start_anal_but.Location = new System.Drawing.Point(505, 606);
             this.Start_anal_but.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Start_anal_but.Name = "Start_anal_but";
             this.Start_anal_but.Size = new System.Drawing.Size(105, 54);
