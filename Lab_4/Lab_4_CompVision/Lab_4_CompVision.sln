@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab_3_CompVision", "Lab_3_CompVision.csproj", "{1A91502A-356B-4B95-828F-AF67F04CCBC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab_4_CompVision", "Lab_4_CompVision.csproj", "{1A91502A-356B-4B95-828F-AF67F04CCBC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

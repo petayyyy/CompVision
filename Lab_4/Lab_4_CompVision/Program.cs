@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Lab_3_CompVision
+namespace Lab_4_CompVision
 {
     internal static class Program
     {

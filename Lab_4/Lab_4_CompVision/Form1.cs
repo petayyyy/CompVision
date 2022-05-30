@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Lab_3_CompVision
+namespace Lab_4_CompVision
 {
     public partial class Form1 : Form
     {

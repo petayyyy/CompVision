@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Lab_3_CompVision.Properties
+namespace Lab_4_CompVision.Properties
 {
 
 
