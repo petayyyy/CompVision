@@ -49,10 +49,11 @@ namespace Lab_3_CompVision
         int[] Red_light1 = new int[6] { 160, 255, 30, 104, 30, 122};
         int[] Red_light2 = new int[6] { 90, 220, 15, 55, 20, 65 };
         int[] Red_dark = new int[6] { 55, 100, 0, 15, 0, 20};
+        int[,] contur = new int[2, 80];
         bool Open_flag = false;
+        bool Open_shablon_flag = false;
         List<Rectangle> list_claster = new List<Rectangle>();
         List<int[]> claster_point = new List<int[]>();
-        Rectangle correct_rect = new Rectangle();
         private void Open_but_Click(object sender, EventArgs e)
         {
             try
@@ -597,6 +598,7 @@ namespace Lab_3_CompVision
                     pictureBox4.Image = new Bitmap(shablon_image, 80, 80);
                     pictureBox4.Size = new Size(100, 100);
                     pictureBox4.Refresh();
+                    Open_shablon_flag = true;
                 }
                 else MessageBox.Show("Error, you don't take any file.");
             }
@@ -607,118 +609,281 @@ namespace Lab_3_CompVision
             }
             pictureBox4.Refresh();
         }
+        public bool shablon_analyze(bool is_auto = true)
+        {
+            contur = new int[2, 80];
+            shablon_80 = new int[80, 80];
+            int count = 0;
+            for (int i = 0; i < pictureBox3.Image.Width; i++)
+            {
+                int first = -1;
+                int last = -1;
+                for (int j = 0; j < pictureBox3.Image.Height; j++)
+                {
+                    Color pixel = ((Bitmap)pictureBox4.Image).GetPixel(i, j);
+                    if (is_auto)
+                    {
+                        if ((pixel.R >= Red_light1[0] && pixel.R <= Red_light1[1] && pixel.B >= Red_light1[4] && pixel.B <= Red_light1[5] && pixel.G >= Red_light1[2] && pixel.G <= Red_light1[3]) ||
+                            (pixel.R >= Red_light2[0] && pixel.R <= Red_light2[1] && pixel.B >= Red_light2[4] && pixel.B <= Red_light2[5] && pixel.G >= Red_light2[2] && pixel.G <= Red_light2[3]) ||
+                            (pixel.R >= Red_dark[0] && pixel.R <= Red_dark[1] && pixel.B >= Red_dark[4] && pixel.B <= Red_dark[5] && pixel.G >= Red_dark[2] && pixel.G <= Red_dark[3]))
+                        {
+                            shablon_80[i, j] = 1;
+                            if (first == -1) first = j;
+                            last = j;
+                            count++;
+                            //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.White);
+                        }
+                        else if (pixel.R >= Blue[0] && pixel.R <= Blue[1] && pixel.B >= Blue[4] && pixel.B <= Blue[5] && pixel.G >= Blue[2] && pixel.G <= Blue[3])
+                        {
+                            shablon_80[i, j] = 1;
+                            if (first == -1) first = j;
+                            last = j;
+                            count--;
+                            //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.White);
+                        }
+                    }
+                    else
+                    {
+                        if (pixel.R >= Int32.Parse(R_min.Text) && pixel.R <= Int32.Parse(R_max.Text) && pixel.B >= Int32.Parse(B_min.Text) && pixel.B <= Int32.Parse(B_max.Text) && pixel.G >= Int32.Parse(G_min.Text) && pixel.G <= Int32.Parse(G_max.Text))
+                        {
+                            shablon_80[i, j] = 1;
+                            if (first == -1) first = j;
+                            last = j;
+                            //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.White);
+                        }
+                    }
+                }
+                contur[0, i] = first;
+                contur[1, i] = last;
+            }
+            if (count > 0) return true;
+            return false;
+        }
+        public void shablon_detect(bool is_auto = true)
+        {
+            // return True if mask red and false if blue
+            bool flag_color = shablon_analyze(is_auto);
+            for (int i = 0; i < pictureBox3.Image.Width; i++)
+            {
+                for (int j = 0; j < pictureBox3.Image.Height; j++)
+                {
+                    Color pixel = ((Bitmap)pictureBox3.Image).GetPixel(i, j);
+                    
+                    if (is_auto) { 
+                        if (flag_color && (pixel.R >= Red_light1[0] && pixel.R <= Red_light1[1] && pixel.B >= Red_light1[4] && pixel.B <= Red_light1[5] && pixel.G >= Red_light1[2] && pixel.G <= Red_light1[3]) ||
+                                (pixel.R >= Red_light2[0] && pixel.R <= Red_light2[1] && pixel.B >= Red_light2[4] && pixel.B <= Red_light2[5] && pixel.G >= Red_light2[2] && pixel.G <= Red_light2[3]) ||
+                                (pixel.R >= Red_dark[0] && pixel.R <= Red_dark[1] && pixel.B >= Red_dark[4] && pixel.B <= Red_dark[5] && pixel.G >= Red_dark[2] && pixel.G <= Red_dark[3]) ||
+                                !flag_color && (pixel.R >= Blue[0] && pixel.R <= Blue[1] && pixel.B >= Blue[4] && pixel.B <= Blue[5] && pixel.G >= Blue[2] && pixel.G <= Blue[3]))
+                        {
+                            frame_80[i, j] = 1;
+                            ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.White);
+                        }
+                    }
+                    else
+                    {
+                        if (pixel.R >= Int32.Parse(R_min.Text) && pixel.R <= Int32.Parse(R_max.Text) && pixel.B >= Int32.Parse(B_min.Text) && pixel.B <= Int32.Parse(B_max.Text) && pixel.G >= Int32.Parse(G_min.Text) && pixel.G <= Int32.Parse(G_max.Text))
+                        {
+                            frame[i, j] = 1;
+                            ((Bitmap)pictureBox2.Image).SetPixel(i, j, Color.White);
+                        }
+                    }
+                }
+            }
+            ////////////////////////////
+            int count_correct = 0;
+            int count_incorrect = 0;
+            for (int i = 0; i < pictureBox3.Image.Width; i++)
+            {
+                for (int j = 0; j < pictureBox3.Image.Height; j++)
+                {
+                    int r = 255;
+                    int g = 255;
+                    int b = 255;
+                    if (frame_80[i, j] == 1 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
+                    {
+                        // Green
+                        r = 0; b = 0;
+                        count_correct++;
+                    }
+                    else if (frame_80[i, j] == 0 && shablon_80[i, j] == 0 && contur[0, i] <= j && contur[1, i] >= j)
+                    {
+                        // Dark Green
+                        r = 0; g = 120; b = 0;
+                        count_correct++;
+                    }
+                    else if (frame_80[i, j] == 1 && shablon_80[i, j] == 0 && contur[0, i] <= j && contur[1, i] >= j)
+                    {
+                        // Red
+                        g = 0; b = 0;
+                        count_incorrect++;
+                    }
+                    else if (frame_80[i, j] == 0 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
+                    {
+                        // Dark Red
+                        r = 120; g = 0; b = 0;
+                        count_incorrect++;
+                    }
+                    else if (frame_80[i, j] == 1 && (contur[0, i] > j || contur[1, i] < j))
+                    {
+                        // Blue
+                        r = 0; g = 0;
+                    }
+                    else if (frame_80[i, j] == 0 && (contur[0, i] > j || contur[1, i] < j))
+                    {
+                        // Dark Blue
+                        r = 0; g = 0; b = 120;
+                    }
+                    ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.FromArgb(r, g, b));
+                }
+            }
+            Result.Text = "Images match on - " + Math.Round(((double)count_correct / (count_incorrect + count_correct)) * 100, 2).ToString();
+            pictureBox3.Refresh();
+            pictureBox4.Refresh();
+        }
         private void Start_anal_but_Click(object sender, EventArgs e)
         {
             bool is_auto = true;
-            int[,] contur = new int[2, 80];
             if (Open_flag)
             {
-                for (int i = 0; i < pictureBox3.Image.Width; i++)
+                if (Open_shablon_flag)
                 {
-                    int first = -1;
-                    int last = -1;
-                    for (int j = 0; j < pictureBox3.Image.Height; j++)
+
+                    for (int i = 0; i < pictureBox3.Image.Width; i++)
                     {
-                        if (is_auto)
+                        int first = -1;
+                        int last = -1;
+                        for (int j = 0; j < pictureBox3.Image.Height; j++)
                         {
-                            Color pixel = ((Bitmap)pictureBox3.Image).GetPixel(i, j);
-                            if ((pixel.R >= Red_light1[0] && pixel.R <= Red_light1[1] && pixel.B >= Red_light1[4] && pixel.B <= Red_light1[5] && pixel.G >= Red_light1[2] && pixel.G <= Red_light1[3]) ||
-                                (pixel.R >= Red_light2[0] && pixel.R <= Red_light2[1] && pixel.B >= Red_light2[4] && pixel.B <= Red_light2[5] && pixel.G >= Red_light2[2] && pixel.G <= Red_light2[3]) ||
-                                (pixel.R >= Red_dark[0] && pixel.R <= Red_dark[1] && pixel.B >= Red_dark[4] && pixel.B <= Red_dark[5] && pixel.G >= Red_dark[2] && pixel.G <= Red_dark[3]) ||
-                                (pixel.R >= Blue[0] && pixel.R <= Blue[1] && pixel.B >= Blue[4] && pixel.B <= Blue[5] && pixel.G >= Blue[2] && pixel.G <= Blue[3]))
+                            if (is_auto)
                             {
-                                frame_80[i, j] = 1;
-                                ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.White);
+                                Color pixel = ((Bitmap)pictureBox3.Image).GetPixel(i, j);
+                                if ((pixel.R >= Red_light1[0] && pixel.R <= Red_light1[1] && pixel.B >= Red_light1[4] && pixel.B <= Red_light1[5] && pixel.G >= Red_light1[2] && pixel.G <= Red_light1[3]) ||
+                                    (pixel.R >= Red_light2[0] && pixel.R <= Red_light2[1] && pixel.B >= Red_light2[4] && pixel.B <= Red_light2[5] && pixel.G >= Red_light2[2] && pixel.G <= Red_light2[3]) ||
+                                    (pixel.R >= Red_dark[0] && pixel.R <= Red_dark[1] && pixel.B >= Red_dark[4] && pixel.B <= Red_dark[5] && pixel.G >= Red_dark[2] && pixel.G <= Red_dark[3]) ||
+                                    (pixel.R >= Blue[0] && pixel.R <= Blue[1] && pixel.B >= Blue[4] && pixel.B <= Blue[5] && pixel.G >= Blue[2] && pixel.G <= Blue[3]))
+                                {
+                                    frame_80[i, j] = 1;
+                                    ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.White);
+                                }
+                                else
+                                {
+                                    frame_80[i, j] = 0;
+                                    ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.Black);
+                                }
+                                ////////////////////////////////////////////////////
+                                pixel = ((Bitmap)pictureBox4.Image).GetPixel(i, j);
+                                if ((pixel.R >= Red_light1[0] && pixel.R <= Red_light1[1] && pixel.B >= Red_light1[4] && pixel.B <= Red_light1[5] && pixel.G >= Red_light1[2] && pixel.G <= Red_light1[3]) ||
+                                    (pixel.R >= Red_light2[0] && pixel.R <= Red_light2[1] && pixel.B >= Red_light2[4] && pixel.B <= Red_light2[5] && pixel.G >= Red_light2[2] && pixel.G <= Red_light2[3]) ||
+                                    (pixel.R >= Red_dark[0] && pixel.R <= Red_dark[1] && pixel.B >= Red_dark[4] && pixel.B <= Red_dark[5] && pixel.G >= Red_dark[2] && pixel.G <= Red_dark[3]) ||
+                                    (pixel.R >= Blue[0] && pixel.R <= Blue[1] && pixel.B >= Blue[4] && pixel.B <= Blue[5] && pixel.G >= Blue[2] && pixel.G <= Blue[3]))
+                                {
+                                    shablon_80[i, j] = 1;
+                                    if (first == -1) first = j;
+                                    last = j;
+                                    //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.White);
+                                }
+                                else
+                                {
+                                    shablon_80[i, j] = 0;
+                                    //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.Black);
+                                }
                             }
                             else
                             {
-                                frame_80[i, j] = 0;
-                                ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.Black);
-                            }
-                            ////////////////////////////////////////////////////
-                            pixel = ((Bitmap)pictureBox4.Image).GetPixel(i, j);
-                            if ((pixel.R >= Red_light1[0] && pixel.R <= Red_light1[1] && pixel.B >= Red_light1[4] && pixel.B <= Red_light1[5] && pixel.G >= Red_light1[2] && pixel.G <= Red_light1[3]) ||
-                                (pixel.R >= Red_light2[0] && pixel.R <= Red_light2[1] && pixel.B >= Red_light2[4] && pixel.B <= Red_light2[5] && pixel.G >= Red_light2[2] && pixel.G <= Red_light2[3]) ||
-                                (pixel.R >= Red_dark[0] && pixel.R <= Red_dark[1] && pixel.B >= Red_dark[4] && pixel.B <= Red_dark[5] && pixel.G >= Red_dark[2] && pixel.G <= Red_dark[3]) ||
-                                (pixel.R >= Blue[0] && pixel.R <= Blue[1] && pixel.B >= Blue[4] && pixel.B <= Blue[5] && pixel.G >= Blue[2] && pixel.G <= Blue[3]))
-                            {
-                                shablon_80[i, j] = 1;
-                                if (first == -1) first = j;
-                                last = j;
-                                //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.White);
-                            }
-                            else
-                            {
-                                shablon_80[i, j] = 0;
-                                //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.Black);
+                                Color pixel = ((Bitmap)pictureBox3.Image).GetPixel(i, j);
+                                if (pixel.R >= Int32.Parse(R_min.Text) && pixel.R <= Int32.Parse(R_max.Text) && pixel.B >= Int32.Parse(B_min.Text) && pixel.B <= Int32.Parse(B_max.Text) && pixel.G >= Int32.Parse(G_min.Text) && pixel.G <= Int32.Parse(G_max.Text))
+                                {
+                                    frame[i, j] = 1;
+                                    ((Bitmap)pictureBox2.Image).SetPixel(i, j, Color.White);
+                                }
                             }
                         }
-                        else
-                        {
-                            Color pixel = ((Bitmap)pictureBox3.Image).GetPixel(i, j);
-                            if (pixel.R >= Int32.Parse(R_min.Text) && pixel.R <= Int32.Parse(R_max.Text) && pixel.B >= Int32.Parse(B_min.Text) && pixel.B <= Int32.Parse(B_max.Text) && pixel.G >= Int32.Parse(G_min.Text) && pixel.G <= Int32.Parse(G_max.Text))
-                            {
-                                frame[i, j] = 1;
-                                ((Bitmap)pictureBox2.Image).SetPixel(i, j, Color.White);
-                            }
-                        }
+                        contur[0, i] = first;
+                        contur[1, i] = last;
                     }
-                    contur[0, i] = first;
-                    contur[1, i] = last;
-                }
-                ////////////////////////////
-                int count_correct = 0;
-                int count_incorrect = 0;
-                for (int i = 0; i < pictureBox3.Image.Width; i++)
-                {
-                    for (int j = 0; j < pictureBox3.Image.Height; j++)
+                    ////////////////////////////
+                    int count_correct = 0;
+                    int count_incorrect = 0;
+                    for (int i = 0; i < pictureBox3.Image.Width; i++)
                     {
-                        int r = 255;
-                        int g = 255;
-                        int b = 255;
+                        for (int j = 0; j < pictureBox3.Image.Height; j++)
+                        {
+                            int r = 255;
+                            int g = 255;
+                            int b = 255;
                         
-                        if (frame_80[i, j] == 1 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
-                        {
-                            // Green
-                            r = 0; b = 0;
-                            count_correct++;
+                            if (frame_80[i, j] == 1 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
+                            {
+                                // Green
+                                r = 0; b = 0;
+                                count_correct++;
+                            }
+                            else if (frame_80[i, j] == 0 && shablon_80[i, j] == 0 && contur[0, i] <= j && contur[1, i] >= j)
+                            {
+                                // Dark Green
+                                r = 0; g = 120;  b = 0;
+                                count_correct++;
+                            }
+                            else if (frame_80[i, j] == 1 && shablon_80[i, j] == 0 && contur[0, i] <= j && contur[1, i] >= j)
+                            {
+                                // Red
+                                g = 0; b = 0;
+                                count_incorrect++;
+                            }
+                            else if (frame_80[i, j] == 0 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
+                            {
+                                // Dark Red
+                                r = 120; g = 0; b = 0;
+                                count_incorrect++;
+                            }
+                            else if (frame_80[i, j] == 1 && (contur[0, i] > j || contur[1, i] < j))
+                            {
+                                // Blue
+                                r = 0; g = 0;
+                            }
+                            else if (frame_80[i, j] == 0 && (contur[0, i] > j || contur[1, i] < j))
+                            {
+                                // Dark Blue
+                                r = 0; g = 0; b = 120;
+                            }
+                            ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.FromArgb(r, g, b));
                         }
-                        else if (frame_80[i, j] == 0 && shablon_80[i, j] == 0 && contur[0, i] <= j && contur[1, i] >= j)
-                        {
-                            // Dark Green
-                            r = 0; g = 120;  b = 0;
-                            count_correct++;
-                        }
-                        else if (frame_80[i, j] == 1 && shablon_80[i, j] == 0 && contur[0, i] <= j && contur[1, i] >= j)
-                        {
-                            // Red
-                            g = 0; b = 0;
-                            count_incorrect++;
-                        }
-                        else if (frame_80[i, j] == 0 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
-                        {
-                            // Dark Red
-                            r = 120; g = 0; b = 0;
-                            count_incorrect++;
-                        }
-                        else if (frame_80[i, j] == 1 && (contur[0, i] > j || contur[1, i] < j))
-                        {
-                            // Blue
-                            r = 0; g = 0;
-                        }
-                        else if (frame_80[i, j] == 0 && (contur[0, i] > j || contur[1, i] < j))
-                        {
-                            // Dark Blue
-                            r = 0; g = 0; b = 120;
-                        }
-                        ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.FromArgb(r, g, b));
                     }
+                    Result.Text = "Images match on - " + Math.Round(((double)count_correct / (count_incorrect + count_correct)) * 100,2).ToString();
+                    pictureBox3.Refresh();
+                    pictureBox4.Refresh();
                 }
-                Result.Text = "Images match on - " + Math.Round(((double)count_correct / (count_incorrect + count_correct)) * 100,2).ToString();
-                pictureBox3.Refresh();
-                pictureBox4.Refresh();
+                else
+                {
+                    MessageBox.Show("You don't open any sample");
+                }
+            }
+            else
+            {
+                MessageBox.Show("You don't open any image");
             }
         }
 
+        private void Auto_flag_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Auto_flag.Checked)
+            {
+                if (Open_shablon_flag)
+                {
+                    if (Open_flag)
+                    {
+                        detect_claster(pictureBox2, true);
+                    }
+                    else
+                    {
+                        MessageBox.Show("You don't open any image");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("You don't open any sample");
+                }
+            }
+        }
     }
 }
