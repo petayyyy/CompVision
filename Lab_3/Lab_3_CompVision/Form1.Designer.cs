@@ -248,7 +248,7 @@
             this.Density.Name = "Density";
             this.Density.Size = new System.Drawing.Size(75, 20);
             this.Density.TabIndex = 35;
-            this.Density.Text = "60";
+            this.Density.Text = "45";
             // 
             // label1
             // 
