@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PIuHfZQDFF4E+QWJKywn06kJIw/ZvsM7UoJwJHobuyvFKrklUpIuNVZJZ1NdA9kYrzdTvzbx3sG9tUXOnhgaRA==",
+  "dgSpecHash": "Y644qsMHvQyiVfYzKPH4WyfYplZ2e9cUgQnX3O4JcahSjRKJHX4s0Ed5K4Bqh4v+C127qgA73cOUjqYrr+/3wQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ilyah\\Desktop\\Долги\\Прога\\4 Sem\\Lab_1\\Lab_1_CompVision\\Lab_1_CompVision\\Lab_1_CompVision.csproj",
+  "projectFilePath": "C:\\Users\\ilyah\\CompVision\\Lab_1\\Lab_1_CompVision\\Lab_1_CompVision\\Lab_1_CompVision.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ilyah\\.nuget\\packages\\emgu.cv\\4.5.5.4823\\emgu.cv.4.5.5.4823.nupkg.sha512",
     "C:\\Users\\ilyah\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.1\\microsoft.netcore.platforms.1.1.1.nupkg.sha512",
