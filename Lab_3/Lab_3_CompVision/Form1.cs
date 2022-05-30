@@ -624,11 +624,11 @@ namespace Lab_3_CompVision
             contur = new int[2, 80];
             shablon_80 = new int[80, 80];
             int count = 0;
-            for (int i = 0; i < pictureBox4.Image.Width; i++)
+            for (int j = 0; j < pictureBox4.Image.Height; j++)
             {
                 int first = -1;
                 int last = -1;
-                for (int j = 0; j < pictureBox4.Image.Height; j++)
+                for (int i = 0; i < pictureBox4.Image.Width; i++)
                 {
                     Color pixel = ((Bitmap)pictureBox4.Image).GetPixel(i, j);
                     if (is_auto)
@@ -638,16 +638,16 @@ namespace Lab_3_CompVision
                             (pixel.R >= Red_dark[0] && pixel.R <= Red_dark[1] && pixel.B >= Red_dark[4] && pixel.B <= Red_dark[5] && pixel.G >= Red_dark[2] && pixel.G <= Red_dark[3]))
                         {
                             shablon_80[i, j] = 1;
-                            if (first == -1) first = j;
-                            last = j;
+                            if (first == -1) first = i;
+                            last = i;
                             count++;
                             //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.White);
                         }
                         else if (pixel.R >= Blue[0] && pixel.R <= Blue[1] && pixel.B >= Blue[4] && pixel.B <= Blue[5] && pixel.G >= Blue[2] && pixel.G <= Blue[3])
                         {
                             shablon_80[i, j] = 1;
-                            if (first == -1) first = j;
-                            last = j;
+                            if (first == -1) first = i;
+                            last = i;
                             count--;
                             //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.White);
                         }
@@ -657,15 +657,15 @@ namespace Lab_3_CompVision
                         if (pixel.R >= Int32.Parse(R_min.Text) && pixel.R <= Int32.Parse(R_max.Text) && pixel.B >= Int32.Parse(B_min.Text) && pixel.B <= Int32.Parse(B_max.Text) && pixel.G >= Int32.Parse(G_min.Text) && pixel.G <= Int32.Parse(G_max.Text))
                         {
                             shablon_80[i, j] = 1;
-                            if (first == -1) first = j;
-                            last = j;
+                            if (first == -1) first = i;
+                            last = i;
                             //((Bitmap)pictureBox4.Image).SetPixel(i, j, Color.White);
                         }
                     }
                 }
-                contur[0, i] = first;
-                contur[1, i] = last;
-            }
+                contur[0, j] = first;
+                contur[1, j] = last;           
+            }           
             if (count > 0) return true;
             return false;
         }
@@ -688,7 +688,6 @@ namespace Lab_3_CompVision
                         {
                             frame_80[i, j] = 1;
                             ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.White);
-                            //MessageBox.Show("");
                         }
                     }
                     else
@@ -711,6 +710,7 @@ namespace Lab_3_CompVision
                     int r = 255;
                     int g = 255;
                     int b = 255;
+                    
                     if (frame_80[i, j] == 1 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
                     {
                         // Green
@@ -735,7 +735,7 @@ namespace Lab_3_CompVision
                         r = 120; g = 0; b = 0;
                         count_incorrect++;
                     }
-                    else if (frame_80[i, j] == 1 && (contur[0, i] > j || contur[1, i] < j))
+                    else if (frame_80[i, j] == 1  && (contur[0, i] > j || contur[1, i] < j))
                     {
                         // Blue
                         r = 0; g = 0;
@@ -759,7 +759,8 @@ namespace Lab_3_CompVision
                 if (Open_shablon_flag)
                 {
                     double fff = shablon_detect();
-                    Result.Text = "Images match on - " + fff.ToString();
+                    if (fff == double.NaN) Result.Text = "Images match on - 0";
+                    else Result.Text = "Images match on - " + fff.ToString();
                 }
                 else
                 {
@@ -806,7 +807,8 @@ namespace Lab_3_CompVision
                         Pen pen = new Pen(Color.Red);
                         graphics2.DrawRectangle(pen, list_claster[index_max_clast]);
                         pictureBox1.Refresh();
-                        Result.Text = "Images match on - " + max_clast.ToString();
+                        if (max_clast == double.NaN) Result.Text = "Images match on - 0";
+                        else Result.Text = "Images match on - " + max_clast.ToString();
                     }
                     else
                     {
