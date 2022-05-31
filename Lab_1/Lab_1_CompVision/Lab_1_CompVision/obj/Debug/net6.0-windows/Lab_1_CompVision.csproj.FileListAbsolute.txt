@@ -17,3 +17,22 @@ C:\Users\ilyah\Desktop\Долги\Прога\4 Sem\Lab_1\Lab_1_CompVision\Lab_1_
 C:\Users\ilyah\Desktop\Долги\Прога\4 Sem\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.genruntimeconfig.cache
 C:\Users\ilyah\Desktop\Долги\Прога\4 Sem\Lab_1\Lab_1_CompVision\Lab_1_CompVision\bin\Debug\net6.0-windows\Emgu.CV.Platform.NetStandard.dll
 C:\Users\ilyah\Desktop\Долги\Прога\4 Sem\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.csproj.CopyComplete
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\bin\Debug\net6.0-windows\Lab_1_CompVision.exe
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\bin\Debug\net6.0-windows\Lab_1_CompVision.deps.json
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\bin\Debug\net6.0-windows\Lab_1_CompVision.runtimeconfig.json
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\bin\Debug\net6.0-windows\Lab_1_CompVision.dll
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\bin\Debug\net6.0-windows\Lab_1_CompVision.pdb
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\bin\Debug\net6.0-windows\Emgu.CV.Platform.NetStandard.dll
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.csproj.AssemblyReference.cache
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.Form1.resources
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.csproj.GenerateResource.cache
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.AssemblyInfoInputs.cache
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.AssemblyInfo.cs
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.csproj.CoreCompileInputs.cache
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.csproj.CopyComplete
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.dll
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\refint\Lab_1_CompVision.dll
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.pdb
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\Lab_1_CompVision.genruntimeconfig.cache
+C:\Users\ilyah\CompVision\Lab_1\Lab_1_CompVision\Lab_1_CompVision\obj\Debug\net6.0-windows\ref\Lab_1_CompVision.dll
