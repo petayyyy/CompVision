@@ -96,17 +96,33 @@ namespace Lab_3_CompVision
             if ((double)sum[0] / sum[1] > d) return true;
             return false;
         }
-        public void view_claster()
+        public void view_claster(bool is_clear = true)
         {
-            dataGridView1.RowCount = 1;
-            for (int i = 0; i < list_claster.Count;i++)
+            if (is_clear)
             {
-                dataGridView1.RowCount += 1;
-                dataGridView1.Rows[i].Cells[0].Value = list_claster[i].X;
-                dataGridView1.Rows[i].Cells[1].Value = list_claster[i].Y;
-                dataGridView1.Rows[i].Cells[2].Value = list_claster[i].Width;
-                dataGridView1.Rows[i].Cells[3].Value = list_claster[i].Height;
-                dataGridView1.Rows[i].Cells[4].Value = counttt(frame, list_claster[i]);
+                dataGridView1.RowCount = 1;
+                for (int i = 0; i < list_claster.Count; i++)
+                {
+                    dataGridView1.RowCount += 1;
+                    dataGridView1.Rows[i].Cells[0].Value = list_claster[i].X;
+                    dataGridView1.Rows[i].Cells[1].Value = list_claster[i].Y;
+                    dataGridView1.Rows[i].Cells[2].Value = list_claster[i].Width;
+                    dataGridView1.Rows[i].Cells[3].Value = list_claster[i].Height;
+                    dataGridView1.Rows[i].Cells[4].Value = counttt(frame, list_claster[i]);
+                }
+            }
+            else
+            {
+                int count = dataGridView1.RowCount-1;
+                for (int i = 0; i < list_claster.Count; i++)
+                {
+                    dataGridView1.RowCount += 1;
+                    dataGridView1.Rows[i + count].Cells[0].Value = list_claster[i].X;
+                    dataGridView1.Rows[i + count].Cells[1].Value = list_claster[i].Y;
+                    dataGridView1.Rows[i + count].Cells[2].Value = list_claster[i].Width;
+                    dataGridView1.Rows[i + count].Cells[3].Value = list_claster[i].Height;
+                    dataGridView1.Rows[i + count].Cells[4].Value = counttt(frame, list_claster[i]);
+                }
             }
         }
         public double counttt(int[,] frame, Rectangle rect)
@@ -133,14 +149,16 @@ namespace Lab_3_CompVision
                 if (Start_but.Text != "Refresh")
                 {
                     detect_claster(pictureBox2, true);
+                    view_claster();
+                    detect_claster(pictureBox2, true, true);
+                    view_claster(false);
                     pictureBox2.Refresh();
                     Start_but.Text = "Refresh";
                     is_auto = true;
-
                 }
                 else
                 {
-                    Start_but.Text = "Start auto detect";
+                    Start_but.Text = "Start detect by system color";
                     graphics.FillRectangle(Brushes.Black, new Rectangle(0, 0, work_image.Width, work_image.Height));
                     pictureBox2.Refresh();
                 }
@@ -418,7 +436,7 @@ namespace Lab_3_CompVision
                 }
             }
         }
-        public void detect_claster(PictureBox pictureBox, bool is_auto = false, int R_minn = 0, int R_maxx = 255, int G_minn = 0, int G_maxx = 255, int B_minn = 0, int B_maxx = 255)
+        public void detect_claster(PictureBox pictureBox, bool is_auto = false, bool flag_color = false, int R_minn = 0, int R_maxx = 255, int G_minn = 0, int G_maxx = 255, int B_minn = 0, int B_maxx = 255)
         {
             list_claster.Clear();
             claster_point.Clear();
@@ -432,12 +450,19 @@ namespace Lab_3_CompVision
                 for (int j = 0; j < work_image.Height; j++)
                 {
                     Color pixel = ((Bitmap)work_image).GetPixel(i, j);
-                    if (is_auto)
-                    {
-                        if ( (pixel.R >= Red_light1[0] && pixel.R <= Red_light1[1] && pixel.B >= Red_light1[4] && pixel.B <= Red_light1[5] && pixel.G >= Red_light1[2] && pixel.G <= Red_light1[3]) ||
-                            (pixel.R >= Red_light2[0]  && pixel.R <= Red_light2[1] && pixel.B >= Red_light2[4] && pixel.B <= Red_light2[5] && pixel.G >= Red_light2[2] && pixel.G <= Red_light2[3]) ||
-                            (pixel.R >= Red_dark[0]    && pixel.R <= Red_dark[1]   && pixel.B >= Red_dark[4]   && pixel.B <= Red_dark[5]   && pixel.G >= Red_dark[2]   && pixel.G <= Red_dark[3])   ||
-                            (pixel.R >= Blue[0]        && pixel.R <= Blue[1]       && pixel.B >= Blue[4]       && pixel.B <= Blue[5]       && pixel.G >= Blue[2]       && pixel.G <= Blue[3]) )
+                    
+                    if (is_auto) {
+                        if (flag_color)
+                        {
+                            if ((pixel.R >= Red_light1[0] && pixel.R <= Red_light1[1] && pixel.B >= Red_light1[4] && pixel.B <= Red_light1[5] && pixel.G >= Red_light1[2] && pixel.G <= Red_light1[3]) ||
+                                (pixel.R >= Red_light2[0] && pixel.R <= Red_light2[1] && pixel.B >= Red_light2[4] && pixel.B <= Red_light2[5] && pixel.G >= Red_light2[2] && pixel.G <= Red_light2[3]) ||
+                                (pixel.R >= Red_dark[0] && pixel.R <= Red_dark[1] && pixel.B >= Red_dark[4] && pixel.B <= Red_dark[5] && pixel.G >= Red_dark[2] && pixel.G <= Red_dark[3]))
+                            {
+                                frame[i, j] = 1;
+                                ((Bitmap)pictureBox2.Image).SetPixel(i, j, Color.White);
+                            }
+                        }
+                        else if (pixel.R >= Blue[0] && pixel.R <= Blue[1] && pixel.B >= Blue[4] && pixel.B <= Blue[5] && pixel.G >= Blue[2] && pixel.G <= Blue[3])
                         {
                             frame[i, j] = 1;
                             ((Bitmap)pictureBox2.Image).SetPixel(i, j, Color.White);
@@ -445,7 +470,7 @@ namespace Lab_3_CompVision
                     }
                     else
                     {
-                        if (pixel.R >= R_minn && pixel.R <= R_maxx && pixel.B >= B_minn && pixel.B <= B_maxx && pixel.G >= G_minn && pixel.G <= G_maxx)
+                        if (pixel.R >= Int32.Parse(R_min.Text) && pixel.R <= Int32.Parse(R_max.Text) && pixel.B >= Int32.Parse(B_min.Text) && pixel.B <= Int32.Parse(B_max.Text) && pixel.G >= Int32.Parse(G_min.Text) && pixel.G <= Int32.Parse(G_max.Text))
                         {
                             frame[i, j] = 1;
                             ((Bitmap)pictureBox2.Image).SetPixel(i, j, Color.White);
@@ -482,8 +507,14 @@ namespace Lab_3_CompVision
                 }
             }
             /////////////////////////
-            find_all_countours(Int32.Parse(Density.Text));
-            find_all_countours(Int32.Parse(Density.Text));
+            find_all_countours(10);
+            find_all_countours(10);
+            //for (int k = 0; k < list_claster.Count; k++)
+            //{
+            //    graphics.DrawRectangle(pen, list_claster[k]);
+            //}
+            //pictureBox2.Refresh();
+            //MessageBox.Show("");
             //////////////////////////////
             for (int i = 0; i < list_claster.Count; i++)
             {
@@ -492,7 +523,7 @@ namespace Lab_3_CompVision
                 {
                     if (g != i)
                     {
-                        if (list_claster[i].X == list_claster[g].X && list_claster[i].Y == list_claster[g].Y)
+                        if ((list_claster[g].Width == 0 && list_claster[g].Height == 0) || (list_claster[i].X == list_claster[g].X && list_claster[i].Y == list_claster[g].Y && list_claster[i].Height == list_claster[g].Height && list_claster[i].Width == list_claster[g].Width) )
                         {
                             list_claster.RemoveAt(g);
                             claster_point.RemoveAt(g);
@@ -503,15 +534,13 @@ namespace Lab_3_CompVision
                         {
                             if (list_claster[i].Width + list_claster[i].Height > list_claster[g].Width + list_claster[g].Height)
                             {
-                                list_claster.RemoveAt(i);
-                                claster_point.RemoveAt(i);
+                                list_claster[i] = find_contours( new Rectangle(list_claster[i].X, list_claster[i].Y, list_claster[i].Width - list_claster[g].Width, list_claster[i].Height));
+                                break;
                             }
                             else
                             {
-                                list_claster.RemoveAt(g);
-                                claster_point.RemoveAt(g);
-                                g--;
-                            }
+                                list_claster[g] = find_contours( new Rectangle(list_claster[g].X, list_claster[g].Y, list_claster[g].Width - list_claster[i].Width, list_claster[g].Height), true);
+        }
                         }
                         else if (check_claster(list_claster[i], list_claster[g]))
                         {
@@ -543,7 +572,6 @@ namespace Lab_3_CompVision
                     g++;
                 }
             }
-            view_claster();
         }
         public bool check_claster(Rectangle first, Rectangle last)
         {           
@@ -559,20 +587,35 @@ namespace Lab_3_CompVision
             
             return false;
         }
+        public Rectangle get_rect_datagrid(int i)
+        {
+            try
+            {
+                int x = (int)dataGridView1.Rows[i].Cells[0].Value;
+                int y = (int)dataGridView1.Rows[i].Cells[1].Value;
+                int w = (int)dataGridView1.Rows[i].Cells[2].Value;
+                int h = (int)dataGridView1.Rows[i].Cells[3].Value;
+                return new Rectangle(x, y, w, h);
+            }
+            catch
+            {
+                return new Rectangle(0, 0, 0, 0);
+            }
+        }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex >= 0)
             {
                 Graphics graphics = Graphics.FromImage(pictureBox1.Image);
                 Pen pen = new Pen(Color.Red);
-                graphics.DrawRectangle(pen, list_claster[e.RowIndex]);
+                graphics.DrawRectangle(pen, get_rect_datagrid(e.RowIndex));
                 pictureBox1.Refresh();
                 graphics = Graphics.FromImage(pictureBox3.Image);
                 graphics.FillRectangle(Brushes.White, new Rectangle(0, 0, pictureBox3.Width, pictureBox3.Height));
                 //graphics = Graphics.FromImage(pictureBox4.Image);
                 //graphics.FillRectangle(Brushes.White, new Rectangle(0, 0, pictureBox4.Width, pictureBox4.Height));
 
-                pictureBox3 = resize(list_claster[e.RowIndex], pictureBox3, work_image);
+                pictureBox3 = resize(get_rect_datagrid(e.RowIndex), pictureBox3, work_image);
 
                 pictureBox3.Refresh();
             }
@@ -584,8 +627,9 @@ namespace Lab_3_CompVision
                 Graphics graphics = Graphics.FromImage(pictureBox2.Image);
                 if (Start_col_but.Text != "Refresh")
                 {
-                    detect_claster(pictureBox2, false, Int32.Parse(B_min.Text), Int32.Parse(B_max.Text), Int32.Parse(G_min.Text), Int32.Parse(G_max.Text), Int32.Parse(R_min.Text), Int32.Parse(R_max.Text));
+                    detect_claster(pictureBox2, false, false, Int32.Parse(B_min.Text), Int32.Parse(B_max.Text), Int32.Parse(G_min.Text), Int32.Parse(G_max.Text), Int32.Parse(R_min.Text), Int32.Parse(R_max.Text));
                     pictureBox2.Refresh();
+                    view_claster();
                     Start_but.Text = "Refresh";
                     is_auto = false;
                 }
@@ -673,7 +717,9 @@ namespace Lab_3_CompVision
         {
             // return True if mask red and false if blue
             bool flag_color = shablon_analyze();
+            bool col = false;
             frame_80 = new int[80, 80];
+
             for (int i = 0; i < pictureBox3.Image.Width; i++)
             {
                 for (int j = 0; j < pictureBox3.Image.Height; j++)
@@ -687,70 +733,78 @@ namespace Lab_3_CompVision
                                 !flag_color && (pixel.R >= Blue[0] && pixel.R <= Blue[1] && pixel.B >= Blue[4] && pixel.B <= Blue[5] && pixel.G >= Blue[2] && pixel.G <= Blue[3]))
                         {
                             frame_80[i, j] = 1;
+                            col = true; 
                             ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.White);
                         }
+                        else ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.Black);
                     }
                     else
                     {
                         if (pixel.R >= Int32.Parse(R_min.Text) && pixel.R <= Int32.Parse(R_max.Text) && pixel.B >= Int32.Parse(B_min.Text) && pixel.B <= Int32.Parse(B_max.Text) && pixel.G >= Int32.Parse(G_min.Text) && pixel.G <= Int32.Parse(G_max.Text))
                         {
-                            frame[i, j] = 1;
+                            frame_80[i, j] = 1;
+                            col = true;
                             ((Bitmap)pictureBox2.Image).SetPixel(i, j, Color.White);
                         }
+                        else ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.Black);
                     }
-                }
-            }
-            ////////////////////////////
-            int count_correct = 0;
-            int count_incorrect = 0;
-            for (int i = 0; i < pictureBox3.Image.Width; i++)
-            {
-                for (int j = 0; j < pictureBox3.Image.Height; j++)
-                {
-                    int r = 255;
-                    int g = 255;
-                    int b = 255;
-                    
-                    if (frame_80[i, j] == 1 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
-                    {
-                        // Green
-                        r = 0; b = 0;
-                        count_correct++;
-                    }
-                    else if (frame_80[i, j] == 0 && shablon_80[i, j] == 0 && contur[0, i] <= j && contur[1, i] >= j)
-                    {
-                        // Dark Green
-                        r = 0; g = 120; b = 0;
-                        count_correct++;
-                    }
-                    else if (frame_80[i, j] == 1 && shablon_80[i, j] == 0 && contur[0, i] <= j && contur[1, i] >= j)
-                    {
-                        // Red
-                        g = 0; b = 0;
-                        count_incorrect++;
-                    }
-                    else if (frame_80[i, j] == 0 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
-                    {
-                        // Dark Red
-                        r = 120; g = 0; b = 0;
-                        count_incorrect++;
-                    }
-                    else if (frame_80[i, j] == 1  && (contur[0, i] > j || contur[1, i] < j))
-                    {
-                        // Blue
-                        r = 0; g = 0;
-                    }
-                    else if (frame_80[i, j] == 0 && (contur[0, i] > j || contur[1, i] < j))
-                    {
-                        // Dark Blue
-                        r = 0; g = 0; b = 120;
-                    }
-                    ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.FromArgb(r, g, b));
                 }
             }
             pictureBox3.Refresh();
-            pictureBox4.Refresh();
-            return Math.Round(((double)count_correct / (count_incorrect + count_correct)) * 100, 2);
+            ////////////////////////////
+            if (col) {
+                int count_correct = 0;
+                int count_incorrect = 0;
+                for (int i = 0; i < pictureBox3.Image.Width; i++)
+                {
+                    for (int j = 0; j < pictureBox3.Image.Height; j++)
+                    {
+                        int r = 255;
+                        int g = 255;
+                        int b = 255;
+
+                        if (frame_80[i, j] == 1 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
+                        {
+                            // Green
+                            r = 0; b = 0;
+                            count_correct++;
+                        }
+                        else if (frame_80[i, j] == 0 && shablon_80[i, j] == 0 && contur[0, i] <= j && contur[1, i] >= j)
+                        {
+                            // Dark Green
+                            r = 0; g = 120; b = 0;
+                            count_correct++;
+                        }
+                        else if (frame_80[i, j] == 1 && shablon_80[i, j] == 0 && contur[0, i] <= j && contur[1, i] >= j)
+                        {
+                            // Red
+                            g = 0; b = 0;
+                            count_incorrect++;
+                        }
+                        else if (frame_80[i, j] == 0 && shablon_80[i, j] == 1 && contur[0, i] <= j && contur[1, i] >= j)
+                        {
+                            // Dark Red
+                            r = 120; g = 0; b = 0;
+                            count_incorrect++;
+                        }
+                        else if (frame_80[i, j] == 1 && (contur[0, i] > j || contur[1, i] < j))
+                        {
+                            // Blue
+                            r = 0; g = 0;
+                        }
+                        else if (frame_80[i, j] == 0 && (contur[0, i] > j || contur[1, i] < j))
+                        {
+                            // Dark Blue
+                            r = 0; g = 0; b = 120;
+                        }
+                        ((Bitmap)pictureBox3.Image).SetPixel(i, j, Color.FromArgb(r, g, b));
+                    }
+                }
+                pictureBox3.Refresh();
+                pictureBox4.Refresh();
+                return Math.Round(((double)count_correct / (count_incorrect + count_correct)) * 100, 2);
+            }
+            return 0.0;
         }
         private void Start_anal_but_Click(object sender, EventArgs e)
         {
@@ -782,13 +836,16 @@ namespace Lab_3_CompVision
                     if (Open_flag)
                     {
                         detect_claster(pictureBox2, true);
+                        view_claster();
+                        detect_claster(pictureBox2, true, true);
+                        view_claster(false);
                         double max_clast = 0.0;
                         int index_max_clast = 0;
-                        for (int i = 0; i < list_claster.Count; i++)
+                        for (int i = 0; i < dataGridView1.RowCount-1; i++)
                         {
                             Graphics graphics = Graphics.FromImage(pictureBox3.Image);
                             graphics.FillRectangle(Brushes.White, new Rectangle(0, 0, pictureBox3.Width, pictureBox3.Height));
-                            pictureBox3 = resize(list_claster[i], pictureBox3, work_image);
+                            pictureBox3 = resize(get_rect_datagrid(i), pictureBox3, work_image);
                             pictureBox3.Refresh();
                             double ffff = shablon_detect();
                             if (ffff > max_clast)
@@ -799,13 +856,13 @@ namespace Lab_3_CompVision
                         }
                         Graphics graphics3 = Graphics.FromImage(pictureBox3.Image);
                         graphics3.FillRectangle(Brushes.White, new Rectangle(0, 0, pictureBox3.Width, pictureBox3.Height));
-                        pictureBox3 = resize(list_claster[index_max_clast], pictureBox3, work_image);
+                        pictureBox3 = resize(get_rect_datagrid(index_max_clast), pictureBox3, work_image);
                         pictureBox3.Refresh();
                         shablon_detect();
                         /////////////////////////////
                         Graphics graphics2 = Graphics.FromImage(pictureBox1.Image);
                         Pen pen = new Pen(Color.Red);
-                        graphics2.DrawRectangle(pen, list_claster[index_max_clast]);
+                        graphics2.DrawRectangle(pen, get_rect_datagrid(index_max_clast));
                         pictureBox1.Refresh();
                         if (max_clast == double.NaN) Result.Text = "Images match on - 0";
                         else Result.Text = "Images match on - " + max_clast.ToString();
