@@ -7,8 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 using OpenCvSharp;
+//using OpenCvSharp.Extensions;
 
 namespace Lab_4_CompVision
 {
@@ -17,7 +19,7 @@ namespace Lab_4_CompVision
         public Form1()
         {
             InitializeComponent();
-            pictureBox1.Image = new Bitmap(640, 480);
+            //pictureBox1.Image = new Bitmap(640, 480);
             pictureBox2.Image = new Bitmap(640, 480);
             pictureBox3.Image = new Bitmap(80, 80);
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -38,11 +40,9 @@ namespace Lab_4_CompVision
             dataGridView1.Columns[4].Width = 140;
             dataGridView1.Width = 540;
 
-            VideoCapture capture;
-            Mat frame;
-            Bitmap image;
-            private Thread camera;
-               bool isCameraRunning = false;
+            Thread thr = new Thread(cam_cap);
+            thr.Start();
+
         }
         Image work_image = new Bitmap(640, 480);
         Image work_mask = new Bitmap(640, 480);
@@ -89,6 +89,26 @@ namespace Lab_4_CompVision
             graphics2.FillRectangle(Brushes.Black, new Rectangle(0, 0, pictureBox2.Width, pictureBox2.Height));
             pictureBox1.Refresh();
             pictureBox2.Refresh();
+        }
+
+        public void cam_cap()
+        {
+            Mat input_flow = new Mat();
+            Mat output_flow = new Mat();
+            bool view_flag = true;
+            VideoCapture video_capture = new VideoCapture(0);
+            video_capture.Open(0);
+
+            if (video_capture.IsOpened())
+            {
+                while (view_flag == true) //ѕолучение данных с камеры (при наличии)
+                {
+                    video_capture.Read(input_flow);
+                    //pictureBox1.Image = input_flow.Clone();
+                    pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
+                    pictureBox1.Refresh();
+                }
+            }
         }
         public bool check_density(Rectangle rect, double d=0.50)
         {
@@ -368,7 +388,7 @@ namespace Lab_4_CompVision
         {
             try
             {
-                pic.Size = new Size(rect.Width, rect.Height);
+                pic.Size = new System.Drawing.Size(rect.Width, rect.Height);
                 pic.Image = new Bitmap(rect.Width, rect.Height);
                 for (int i = 0; i < rect.Width; i++)
                 {
@@ -383,7 +403,7 @@ namespace Lab_4_CompVision
                     }
                 }
                 pic.Image = new Bitmap(pic.Image, 80, 80);
-                pic.Size = new Size(100, 100);
+                pic.Size = new System.Drawing.Size(100, 100);
                 pic.Refresh();
                 return pic;
             }
@@ -614,7 +634,7 @@ namespace Lab_4_CompVision
                 {
                     shablon_image = Image.FromFile(openFileDialog1.FileName);
                     pictureBox4.Image = new Bitmap(shablon_image, 80, 80);
-                    pictureBox4.Size = new Size(100, 100);
+                    pictureBox4.Size = new System.Drawing.Size(100, 100);
                     pictureBox4.Refresh();
                     Open_shablon_flag = true;
                 }
