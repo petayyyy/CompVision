@@ -40,8 +40,8 @@ namespace Lab_4_CompVision
             dataGridView1.Columns[4].Width = 140;
             dataGridView1.Width = 540;
 
-            Thread thr = new Thread(cam_cap);
-            thr.Start();
+            //Thread thr = new Thread(cam_cap);
+            //thr.Start();
 
         }
         Image work_image = new Bitmap(640, 480);
@@ -65,6 +65,8 @@ namespace Lab_4_CompVision
         List<int[]> claster_point = new List<int[]>();
         private void Open_but_Click(object sender, EventArgs e)
         {
+            cam_cap();
+
             try
             {
                 DialogResult res = openFileDialog1.ShowDialog();
