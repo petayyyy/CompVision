@@ -37,12 +37,13 @@ namespace Lab_4_CompVision
             dataGridView1.Columns[4].HeaderText = "Density";
             dataGridView1.Columns[4].Width = 140;
             dataGridView1.Width = 540;
-
+            /*
             VideoCapture capture;
             Mat frame;
             Bitmap image;
             private Thread camera;
                bool isCameraRunning = false;
+            */
         }
         Image work_image = new Bitmap(640, 480);
         Image work_mask = new Bitmap(640, 480);
