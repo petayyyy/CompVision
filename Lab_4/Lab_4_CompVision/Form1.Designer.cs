@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.Open_but = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -45,10 +46,8 @@
             this.B_min = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.Start_but = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.Density = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Start_col_but = new System.Windows.Forms.Button();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
@@ -58,20 +57,21 @@
             this.label9 = new System.Windows.Forms.Label();
             this.Open_sahblon_but = new System.Windows.Forms.Button();
             this.Start_anal_but = new System.Windows.Forms.Button();
-            this.Result = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.Auto_flag = new System.Windows.Forms.CheckBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.Cam_but = new System.Windows.Forms.Button();
+            this.Refr_but = new System.Windows.Forms.Button();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "PNG|*.png|JPG|*.jpg|BMP|*.bmp";
+            this.openFileDialog1.Filter = "PNG|*.png|JPG|*.jpg|BMP|*.bmp|AVI|*.avi|MP4|*.mp4";
             // 
             // Open_but
             // 
@@ -80,7 +80,7 @@
             this.Open_but.Name = "Open_but";
             this.Open_but.Size = new System.Drawing.Size(134, 68);
             this.Open_but.TabIndex = 0;
-            this.Open_but.Text = "Open";
+            this.Open_but.Text = "Open input image/video";
             this.Open_but.UseVisualStyleBackColor = false;
             this.Open_but.Click += new System.EventHandler(this.Open_but_Click);
             // 
@@ -209,20 +209,13 @@
             // Start_but
             // 
             this.Start_but.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Start_but.Location = new System.Drawing.Point(22, 100);
+            this.Start_but.Location = new System.Drawing.Point(895, 37);
             this.Start_but.Name = "Start_but";
             this.Start_but.Size = new System.Drawing.Size(134, 68);
             this.Start_but.TabIndex = 32;
             this.Start_but.Text = "Start detect by system color";
             this.Start_but.UseVisualStyleBackColor = false;
             this.Start_but.Click += new System.EventHandler(this.Start_but_Click);
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 929);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(1962, 68);
-            this.progressBar1.TabIndex = 33;
             // 
             // Density
             // 
@@ -241,22 +234,10 @@
             this.label1.TabIndex = 34;
             this.label1.Text = "Density, %";
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(1168, 631);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersWidth = 62;
-            this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(326, 278);
-            this.dataGridView1.TabIndex = 36;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
             // Start_col_but
             // 
             this.Start_col_but.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Start_col_but.Location = new System.Drawing.Point(22, 185);
+            this.Start_col_but.Location = new System.Drawing.Point(895, 128);
             this.Start_col_but.Name = "Start_col_but";
             this.Start_col_but.Size = new System.Drawing.Size(134, 68);
             this.Start_col_but.TabIndex = 37;
@@ -338,34 +319,42 @@
             this.Start_anal_but.UseVisualStyleBackColor = false;
             this.Start_anal_but.Click += new System.EventHandler(this.Start_anal_but_Click);
             // 
-            // Result
+            // timer1
             // 
-            this.Result.Location = new System.Drawing.Point(850, 831);
-            this.Result.Name = "Result";
-            this.Result.Size = new System.Drawing.Size(277, 26);
-            this.Result.TabIndex = 47;
+            this.timer1.Interval = 6;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // label10
+            // Cam_but
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(848, 808);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(55, 20);
-            this.label10.TabIndex = 46;
-            this.label10.Text = "Result";
+            this.Cam_but.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Cam_but.Location = new System.Drawing.Point(22, 98);
+            this.Cam_but.Name = "Cam_but";
+            this.Cam_but.Size = new System.Drawing.Size(134, 68);
+            this.Cam_but.TabIndex = 49;
+            this.Cam_but.Text = "Start work with laptop camera";
+            this.Cam_but.UseVisualStyleBackColor = false;
+            this.Cam_but.Click += new System.EventHandler(this.Cam_but_Click);
             // 
-            // Auto_flag
+            // Refr_but
             // 
-            this.Auto_flag.AutoSize = true;
-            this.Auto_flag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Auto_flag.Location = new System.Drawing.Point(854, 869);
-            this.Auto_flag.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Auto_flag.Name = "Auto_flag";
-            this.Auto_flag.Size = new System.Drawing.Size(277, 33);
-            this.Auto_flag.TabIndex = 48;
-            this.Auto_flag.Text = "Auto detect road signs";
-            this.Auto_flag.UseVisualStyleBackColor = true;
-            this.Auto_flag.CheckedChanged += new System.EventHandler(this.Auto_flag_CheckedChanged);
+            this.Refr_but.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Refr_but.Location = new System.Drawing.Point(22, 184);
+            this.Refr_but.Name = "Refr_but";
+            this.Refr_but.Size = new System.Drawing.Size(134, 68);
+            this.Refr_but.TabIndex = 50;
+            this.Refr_but.Text = "Refresh";
+            this.Refr_but.UseVisualStyleBackColor = false;
+            this.Refr_but.Click += new System.EventHandler(this.Refr_but_Click);
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.pictureBox5.Location = new System.Drawing.Point(1168, 604);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(640, 480);
+            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox5.TabIndex = 51;
+            this.pictureBox5.TabStop = false;
             // 
             // Form1
             // 
@@ -373,9 +362,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
             this.ClientSize = new System.Drawing.Size(1924, 1009);
-            this.Controls.Add(this.Auto_flag);
-            this.Controls.Add(this.Result);
-            this.Controls.Add(this.label10);
+            this.Controls.Add(this.pictureBox5);
+            this.Controls.Add(this.Refr_but);
+            this.Controls.Add(this.Cam_but);
             this.Controls.Add(this.Start_anal_but);
             this.Controls.Add(this.Open_sahblon_but);
             this.Controls.Add(this.Min_size);
@@ -385,10 +374,8 @@
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.Start_col_but);
-            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.Density);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.Start_but);
             this.Controls.Add(this.R_max);
             this.Controls.Add(this.label7);
@@ -409,9 +396,9 @@
             this.Text = "Kholodilov_Lab_4";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -436,10 +423,8 @@
         private System.Windows.Forms.TextBox B_min;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button Start_but;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.TextBox Density;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button Start_col_but;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox4;
@@ -449,9 +434,10 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button Open_sahblon_but;
         private System.Windows.Forms.Button Start_anal_but;
-        private System.Windows.Forms.TextBox Result;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.CheckBox Auto_flag;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button Cam_but;
+        private System.Windows.Forms.Button Refr_but;
+        private System.Windows.Forms.PictureBox pictureBox5;
     }
 }
 

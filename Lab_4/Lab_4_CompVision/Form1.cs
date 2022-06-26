@@ -25,24 +25,6 @@ namespace Lab_4_CompVision
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox4.Image = new Bitmap(80, 80);
             pictureBox4.SizeMode = PictureBoxSizeMode.StretchImage;
-            dataGridView1.ColumnCount = 5;
-            dataGridView1.RowCount = 1;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.Columns[0].HeaderText = "X";
-            dataGridView1.Columns[0].Width = 100;
-            dataGridView1.Columns[1].HeaderText = "Y";
-            dataGridView1.Columns[1].Width = 100;
-            dataGridView1.Columns[2].HeaderText = "Width";
-            dataGridView1.Columns[2].Width = 100;
-            dataGridView1.Columns[3].HeaderText = "Height";
-            dataGridView1.Columns[3].Width = 100;
-            dataGridView1.Columns[4].HeaderText = "Density";
-            dataGridView1.Columns[4].Width = 140;
-            dataGridView1.Width = 540;
-
-            //Thread thr = new Thread(cam_cap);
-            //thr.Start();
-
         }
         Image work_image = new Bitmap(640, 480);
         Image work_mask = new Bitmap(640, 480);
@@ -53,31 +35,42 @@ namespace Lab_4_CompVision
         int [,] frame = new int[640, 480];
         int [,] frame_80 = new int[80, 80];
         int[,] shablon_80 = new int[80, 80];
-        int[] Blue = new int[6] { 0, 15, 0, 95, 30, 200};
-        int[] Red_light1 = new int[6] { 160, 255, 30, 104, 30, 122};
-        int[] Red_light2 = new int[6] { 90, 220, 15, 55, 20, 65 };
-        int[] Red_dark = new int[6] { 55, 100, 0, 15, 0, 20};
-        int[,] contur = new int[2, 80];
         bool Open_flag = false;
         bool Open_shablon_flag = false;
         bool is_auto = true;
+        bool is_cam = false;
+        int[] Blue = new int[6] { 0, 15, 0, 95, 30, 200 };
+        int[] Red_light1 = new int[6] { 160, 255, 30, 104, 30, 122 };
+        int[] Red_light2 = new int[6] { 90, 220, 15, 55, 20, 65 };
+        int[] Red_dark = new int[6] { 55, 100, 0, 15, 0, 20 };
+        int[,] contur = new int[2, 80];
         List<Rectangle> list_claster = new List<Rectangle>();
         List<int[]> claster_point = new List<int[]>();
         private void Open_but_Click(object sender, EventArgs e)
         {
-            cam_cap();
-
             try
             {
                 DialogResult res = openFileDialog1.ShowDialog();
                 if (res == DialogResult.OK)
                 {
-                    work_image = Image.FromFile(openFileDialog1.FileName);
-                    Open_flag = true;
-                    filtred_image();
-                    output_image = (Bitmap)work_image.Clone();
-                    pictureBox1.Image = output_image;
-
+                    if (openFileDialog1.FileName.Contains(".mp4") || openFileDialog1.FileName.Contains(".avi"))
+                    {
+                        is_video = true;
+                        video_capture.Open(openFileDialog1.FileName);
+                    }
+                    else
+                    {
+                        is_video = false;
+                        input_flow = new Mat(openFileDialog1.FileName);
+                        pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
+                    }
+                    timer1.Start();
+                    Graphics graphics2 = Graphics.FromImage(pictureBox2.Image);
+                    list_claster.Clear();
+                    graphics2.FillRectangle(Brushes.Black, new Rectangle(0, 0, pictureBox2.Width, pictureBox2.Height));
+                    pictureBox1.Refresh();
+                    pictureBox2.Refresh();
+                    Cam_but.Enabled = false;
                 }
                 else MessageBox.Show("Error, you don't take any file.");
             }
@@ -86,32 +79,15 @@ namespace Lab_4_CompVision
                 MessageBox.Show(ex.Message);
                 MessageBox.Show("Error, your file have incorrect type. You must take .png, .jpg or .bmp.");
             }
-            Graphics graphics2 = Graphics.FromImage(pictureBox2.Image);
-            list_claster.Clear();
-            graphics2.FillRectangle(Brushes.Black, new Rectangle(0, 0, pictureBox2.Width, pictureBox2.Height));
-            pictureBox1.Refresh();
-            pictureBox2.Refresh();
         }
-
-        public void cam_cap()
-        {
-            Mat input_flow = new Mat();
-            Mat output_flow = new Mat();
-            bool view_flag = true;
-            VideoCapture video_capture = new VideoCapture(0);
-            video_capture.Open(0);
-
-            if (video_capture.IsOpened())
-            {
-                while (view_flag == true) //ѕолучение данных с камеры (при наличии)
-                {
-                    video_capture.Read(input_flow);
-                    //pictureBox1.Image = input_flow.Clone();
-                    pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
-                    pictureBox1.Refresh();
-                }
-            }
-        }
+        Mat input_flow = new Mat();
+        Mat output_flow = new Mat();
+        Mat canny_flow = new Mat();
+        Mat blue_flow = new Mat();
+        Mat red_flow = new Mat();
+        bool view_flag = true;
+        bool is_video = false;
+        VideoCapture video_capture = new VideoCapture();
         public bool check_density(Rectangle rect, double d=0.50)
         {
             int[] sum = new int[2] { 0, 0 };
@@ -125,19 +101,6 @@ namespace Lab_4_CompVision
             }
             if ((double)sum[0] / sum[1] > d) return true;
             return false;
-        }
-        public void view_claster()
-        {
-            dataGridView1.RowCount = 1;
-            for (int i = 0; i < list_claster.Count;i++)
-            {
-                dataGridView1.RowCount += 1;
-                dataGridView1.Rows[i].Cells[0].Value = list_claster[i].X;
-                dataGridView1.Rows[i].Cells[1].Value = list_claster[i].Y;
-                dataGridView1.Rows[i].Cells[2].Value = list_claster[i].Width;
-                dataGridView1.Rows[i].Cells[3].Value = list_claster[i].Height;
-                dataGridView1.Rows[i].Cells[4].Value = counttt(frame, list_claster[i]);
-            }
         }
         public double counttt(int[,] frame, Rectangle rect)
         {
@@ -456,7 +419,6 @@ namespace Lab_4_CompVision
             Graphics graphics1 = Graphics.FromImage(pictureBox1.Image);
             Pen pen = new Pen(Color.Red);
             frame =  new int[640, 480];
-            progressBar1.Maximum = work_image.Width;
             for (int i = 0; i < work_image.Width; i++)
             {
                 for (int j = 0; j < work_image.Height; j++)
@@ -482,12 +444,9 @@ namespace Lab_4_CompVision
                         }
                     }
                 }
-                progressBar1.Value = i;
             }
             work_mask = (Bitmap)pictureBox2.Image.Clone();
-            progressBar1.Value = 0;
             pictureBox2.Refresh(); 
-            progressBar1.Maximum = work_image.Width;
             ///////////////////////////////
             analize_image(640, 480, 10);
             //////////////////////////
@@ -573,7 +532,6 @@ namespace Lab_4_CompVision
                     g++;
                 }
             }
-            view_claster();
         }
         public bool check_claster(Rectangle first, Rectangle last)
         {           
@@ -789,8 +747,8 @@ namespace Lab_4_CompVision
                 if (Open_shablon_flag)
                 {
                     double fff = shablon_detect();
-                    if (fff == double.NaN) Result.Text = "Images match on - 0";
-                    else Result.Text = "Images match on - " + fff.ToString();
+                    //if (fff == double.NaN) Result.Text = "Images match on - 0";
+                    //else Result.Text = "Images match on - " + fff.ToString();
                 }
                 else
                 {
@@ -805,7 +763,7 @@ namespace Lab_4_CompVision
 
         private void Auto_flag_CheckedChanged(object sender, EventArgs e)
         {
-            if (Auto_flag.Checked)
+            if (true)
             {
                 if (Open_shablon_flag)
                 {
@@ -837,8 +795,8 @@ namespace Lab_4_CompVision
                         Pen pen = new Pen(Color.Red);
                         graphics2.DrawRectangle(pen, list_claster[index_max_clast]);
                         pictureBox1.Refresh();
-                        if (max_clast == double.NaN) Result.Text = "Images match on - 0";
-                        else Result.Text = "Images match on - " + max_clast.ToString();
+                        //if (max_clast == double.NaN) Result.Text = "Images match on - 0";
+                        //else Result.Text = "Images match on - " + max_clast.ToString();
                     }
                     else
                     {
@@ -857,6 +815,92 @@ namespace Lab_4_CompVision
                 pictureBox2.Refresh();
                 pictureBox1.Image = (Bitmap)work_image.Clone();
                 pictureBox1.Refresh();
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (video_capture.IsOpened() && (is_cam || is_video))
+                {
+                    video_capture.Read(input_flow);
+                    work_image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
+                    pictureBox1.Image = (Bitmap)work_image.Clone();
+                    pictureBox1.Refresh();
+                }
+            } 
+            catch 
+            {
+                if (is_video)
+                {
+                    Refr_but.Text = "Restart video";
+                }
+            }
+            // to hsv
+            Cv2.CvtColor(input_flow, output_flow, ColorConversionCodes.RGB2HSV);
+            // to canny
+            Cv2.Canny(input_flow, canny_flow, 50, 150, 3);
+            // find object
+            Cv2.InRange(output_flow, new Scalar(0, 190, 0), new Scalar(100, 255, 255), blue_flow);
+            Cv2.FindContours(blue_flow, out OpenCvSharp.Point[][] countors, out HierarchyIndex[]  hierarchyIndexes, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+            try
+            {
+                int i=0;
+                foreach (var contour in countors)
+                {
+                    if (contour.Length > 10)
+                    {
+                        Cv2.DrawContours(input_flow, countors, i, new Scalar(0, 0, 255));
+                    }
+                    i++;
+                }
+            }
+            catch { }
+            pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
+            pictureBox1.Refresh();
+            pictureBox2.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(blue_flow);
+            pictureBox2.Refresh();
+            pictureBox5.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(canny_flow);
+            pictureBox5.Refresh();
+        }
+
+        private void Cam_but_Click(object sender, EventArgs e)
+        {
+            is_cam = true;
+            Open_but.Enabled = false;
+            timer1.Start();
+            video_capture = new VideoCapture(0);
+            video_capture.Open(0);
+        }
+
+        private void Refr_but_Click(object sender, EventArgs e)
+        {
+            if (Refr_but.Text == "Restart video")
+            {
+                video_capture.Open(openFileDialog1.FileName);
+                Refr_but.Text = "Refresh";
+            }
+            else
+            {
+                try
+                {
+                    is_cam = false;
+                    is_video = false;
+                    Cam_but.Enabled = true;
+                    Open_but.Enabled = true;
+                    Graphics graphics2 = Graphics.FromImage(pictureBox2.Image);
+                    graphics2.FillRectangle(Brushes.Black, new Rectangle(0, 0, pictureBox2.Width, pictureBox2.Height));
+                    Graphics graphics = Graphics.FromImage(pictureBox1.Image);
+                    graphics.FillRectangle(Brushes.White, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height));
+                    pictureBox1.Refresh();
+                    pictureBox2.Refresh();
+                    list_claster.Clear();
+                    timer1.Stop();
+                    video_capture.Release();
+
+                }
+                catch { }
             }
         }
     }
