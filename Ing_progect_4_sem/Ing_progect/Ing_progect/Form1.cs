@@ -62,6 +62,7 @@ namespace Ing_progect
                     Refr_but.Text = "Restart video";
                 }
             }
+            CircleSegment[] circles;
             // BGR to GRAY
             Cv2.CvtColor(input_flow, gray_flow, ColorConversionCodes.BGR2GRAY);
             // blur
@@ -76,12 +77,35 @@ namespace Ing_progect
             Cv2.GaussianBlur(input_flow, output_flow, new OpenCvSharp.Size(33, 33), 0);
             Cv2.CvtColor(output_flow, output_flow, ColorConversionCodes.BGR2HSV);
             Cv2.InRange(output_flow, new Scalar(ball_hsv[0], ball_hsv[1], ball_hsv[2]), new Scalar(ball_hsv[3], ball_hsv[4], ball_hsv[5]), blue_flow);
-            pyr_flow = blue_flow.Clone();
             Cv2.Erode(blue_flow, blue_flow, null, iterations: 2);
             Cv2.Dilate(blue_flow, blue_flow, null, iterations: 2);
             Cv2.FindContours(blue_flow, out OpenCvSharp.Point[][] countors, out HierarchyIndex[] hierarchyIndexes, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
-            try
+
+            for (int i = 0; i < countors.Length; i++)
             {
+                Moments mom = Cv2.Moments(countors[i], true);
+                if (mom.M00 > 100)
+                {
+                    float rad;
+                    pyr_flow = blue_flow.Clone();
+                    Cv2.MinEnclosingCircle(OpenCvSharp.InputArray.Create(countors[i]), out OpenCvSharp.Point2f coord, out rad);
+                    if ((int)coord.X - (int)rad > 0 && (int)coord.Y - (int)rad > 0 && (int)rad * 2 + (int)coord.X < gray_flow.Width && (int)coord.Y + (int)rad * 2 < gray_flow.Height)
+                    {
+                        if ((int)coord.X - (int)rad - (int)rad > 0 && (int)coord.Y - (int)rad - (int)rad > 0 && (int)rad * 4 + (int)coord.X < gray_flow.Width && (int)coord.Y + (int)rad * 4 < gray_flow.Height)
+                        {
+                            pyr_flow = new Mat(pyr_flow, new Rect((int)coord.X - (int)rad - (int)rad, (int)coord.Y - (int)rad - (int)rad, (int)rad * 4, (int)rad * 4));
+                        }
+                        else pyr_flow = new Mat(pyr_flow, new Rect((int)coord.X - (int)rad, (int)coord.Y - (int)rad, (int)rad * 2, (int)rad * 2));
+                    }
+                    circles = Cv2.HoughCircles(pyr_flow, HoughModes.Gradient, 1, gray_flow.Height / 8, Par1_bar.Value, Par2_bar.Value, 0, 0);
+                    if (circles.Length > 0 && circles.Length < 3)
+                    {
+                        Cv2.PutText(input_flow, coord.ToString(), (OpenCvSharp.Point)coord, HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
+                        Cv2.Circle(input_flow, (OpenCvSharp.Point)coord, (int)rad, Scalar.FromRgb(255, 0, 255), 1);
+                    }
+                } 
+            }
+                /*
                 foreach (var contour in countors)
                 {
                     Moments mom = Cv2.Moments(contour, true);
@@ -90,15 +114,14 @@ namespace Ing_progect
                         float rad;
                         Cv2.MinEnclosingCircle(OpenCvSharp.InputArray.Create(contour), out OpenCvSharp.Point2f coord, out rad);
 
-                        double ar = Cv2.ArcLength(contour, true);
+                        //double ar = Cv2.ArcLength(contour, true);
                         //OpenCvSharp.Point[][] cntr = { Cv2.ApproxPolyDP(contour, ar * 0.01, true) };
                         //Cv2.DrawContours(input_flow, cntr, 0, new Scalar(255, 0, 255));
                         //Cv2.DrawContours(input_flow, countors, i, new Scalar(255, 0, 255));
 
                         //ball_coord = new OpenCvSharp.Point(mom.M10 / mom.M00, mom.M01 / mom.M00);
                         // balls_coord.Add(ball_coord);
-                        Cv2.PutText(input_flow, coord.ToString(), (OpenCvSharp.Point)coord, HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
-                        Cv2.Circle(input_flow, (OpenCvSharp.Point)coord, (int)rad, Scalar.FromRgb(255, 0, 255), 1);
+
 
                         //CircleSegment[] circles = Cv2.HoughCircles(gray_flow, HoughModes.Gradient, 1, gray_flow.Height/8, 150, 50, 1, 200);
                         if ((int)coord.X - (int)rad > 0 && (int)coord.Y - (int)rad > 0 && (int)rad * 2 + (int)coord.X - (int)rad < gray_flow.Width && (int)coord.Y + (int)rad < gray_flow.Height)
@@ -108,10 +131,16 @@ namespace Ing_progect
                                 pyr_flow = new Mat(pyr_flow, new Rect((int)coord.X - (int)rad - (int)rad, (int)coord.Y - (int)rad - (int)rad, (int)rad * 4, (int)rad * 4));
                             }
                             else pyr_flow = new Mat(pyr_flow, new Rect((int)coord.X - (int)rad, (int)coord.Y - (int)rad, (int)rad * 2, (int)rad * 2));
-                            CircleSegment[] circles = Cv2.HoughCircles(pyr_flow, HoughModes.Gradient, 1, gray_flow.Height / 8, Par1_bar.Value, Par2_bar.Value, 0, 0);
-                            Cv2.PutText(input_flow, circles.Length.ToString(), new OpenCvSharp.Point(600, 400), HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
-                            foreach (var circle in circles)
-                            {
+                        }
+                        circles = Cv2.HoughCircles(pyr_flow, HoughModes.Gradient, 1, gray_flow.Height / 8, Par1_bar.Value, Par2_bar.Value, 0, 0);
+                        //Cv2.PutText(input_flow, circles.Length.ToString(), new OpenCvSharp.Point(600, 400), HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
+                        if (circles.Length > 0 && circles.Length < 3)
+                        {
+                            Cv2.PutText(input_flow, coord.ToString(), (OpenCvSharp.Point)coord, HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
+                            Cv2.Circle(input_flow, (OpenCvSharp.Point)coord, (int)rad, Scalar.FromRgb(255, 0, 255), 1);
+                        }
+                            //foreach (var circle in circles)
+                            //{
                                 //if (check_circl(circle, ball_coord))
                                 //{
                                 //    Cv2.Circle(input_flow, (OpenCvSharp.Point)circle.Center, (int)circle.Radius, Scalar.FromRgb(0, 0, 255), 10);
@@ -119,10 +148,10 @@ namespace Ing_progect
                                 //}
                                 //Cv2.Circle(input_flow, (OpenCvSharp.Point)coord, (int)rad, Scalar.FromRgb(0, 0, 255), 1);
                                 //Cv2.Circle(input_flow, (OpenCvSharp.Point)coord, 1, Scalar.FromRgb(0, 0, 0), 1);
-                                Cv2.Circle(input_flow, (int)circle.Center.X + (int)coord.X - (int)rad - (int)rad, (int)circle.Center.Y + (int)coord.Y - (int)rad - (int)rad, (int)circle.Radius, Scalar.FromRgb(0, 0, 255), 1);
+                                //Cv2.Circle(input_flow, (int)circle.Center.X + (int)coord.X - (int)rad - (int)rad, (int)circle.Center.Y + (int)coord.Y - (int)rad - (int)rad, (int)circle.Radius, Scalar.FromRgb(0, 0, 255), 1);
                                 //Cv2.Circle(input_flow, (int)circle.Center.X + (int)coord.Y, (int)circle.Center.Y + (int)coord.Y, 1, Scalar.FromRgb(0, 0, 0), 1);
-                            }
-                        }
+                            //}
+                        
                         /*
                         foreach (var canny_countor in canny_countors)
                         {
@@ -131,12 +160,8 @@ namespace Ing_progect
                             OpenCvSharp.Point[][] cntr = { canny_countor };
                             Cv2.DrawContours(input_flow, cntr, 0, new Scalar(0, 0, 255));
                         }
-                        */
-                    }
-                }
-            }
-            catch { }//(Exception ex) { MessageBox.Show(Text, ex.Message); }
-            
+            */
+          
             /*
             //Cv2.FindContours(canny_flow, out OpenCvSharp.Point[][] countors, out HierarchyIndex[] hierarchyIndexes, RetrievalModes.List, ContourApproximationModes.ApproxSimple);
             for (int i = 0; i < circles.Length; i++)

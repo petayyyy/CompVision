@@ -34,7 +34,6 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.Cam_but = new System.Windows.Forms.Button();
             this.Refr_but = new System.Windows.Forms.Button();
-            this.listView1 = new System.Windows.Forms.ListView();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.Open_but = new System.Windows.Forms.Button();
@@ -52,6 +51,13 @@
             this.Par2_bar = new System.Windows.Forms.TrackBar();
             this.Par1_bar = new System.Windows.Forms.TrackBar();
             this.Par_box = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -79,7 +85,7 @@
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.IndianRed;
-            this.pictureBox2.Location = new System.Drawing.Point(1076, 29);
+            this.pictureBox2.Location = new System.Drawing.Point(1076, 3);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(320, 240);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -110,20 +116,8 @@
             this.Refr_but.UseVisualStyleBackColor = false;
             this.Refr_but.Click += new System.EventHandler(this.Refr_but_Click_1);
             // 
-            // listView1
-            // 
-            this.listView1.BackColor = System.Drawing.Color.IndianRed;
-            this.listView1.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(891, 150);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(158, 619);
-            this.listView1.TabIndex = 4;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            // 
             // timer1
             // 
-            this.timer1.Interval = 10;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // openFileDialog1
@@ -145,7 +139,7 @@
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.IndianRed;
-            this.pictureBox3.Location = new System.Drawing.Point(1076, 308);
+            this.pictureBox3.Location = new System.Drawing.Point(1076, 249);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(320, 240);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -155,7 +149,7 @@
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.IndianRed;
-            this.pictureBox4.Location = new System.Drawing.Point(1076, 588);
+            this.pictureBox4.Location = new System.Drawing.Point(1076, 495);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(320, 240);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -165,7 +159,7 @@
             // H_min_bar
             // 
             this.H_min_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.H_min_bar.Location = new System.Drawing.Point(18, 626);
+            this.H_min_bar.Location = new System.Drawing.Point(15, 1069);
             this.H_min_bar.Maximum = 255;
             this.H_min_bar.Name = "H_min_bar";
             this.H_min_bar.Size = new System.Drawing.Size(407, 56);
@@ -174,7 +168,7 @@
             // S_min_bar
             // 
             this.S_min_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.S_min_bar.Location = new System.Drawing.Point(18, 703);
+            this.S_min_bar.Location = new System.Drawing.Point(15, 1146);
             this.S_min_bar.Maximum = 255;
             this.S_min_bar.Name = "S_min_bar";
             this.S_min_bar.Size = new System.Drawing.Size(407, 56);
@@ -183,7 +177,7 @@
             // V_min_bar
             // 
             this.V_min_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.V_min_bar.Location = new System.Drawing.Point(18, 772);
+            this.V_min_bar.Location = new System.Drawing.Point(15, 1215);
             this.V_min_bar.Maximum = 255;
             this.V_min_bar.Name = "V_min_bar";
             this.V_min_bar.Size = new System.Drawing.Size(407, 56);
@@ -192,7 +186,7 @@
             // V_max_bar
             // 
             this.V_max_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.V_max_bar.Location = new System.Drawing.Point(467, 772);
+            this.V_max_bar.Location = new System.Drawing.Point(464, 1215);
             this.V_max_bar.Maximum = 255;
             this.V_max_bar.Name = "V_max_bar";
             this.V_max_bar.Size = new System.Drawing.Size(407, 56);
@@ -201,7 +195,7 @@
             // S_max_bar
             // 
             this.S_max_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.S_max_bar.Location = new System.Drawing.Point(467, 703);
+            this.S_max_bar.Location = new System.Drawing.Point(464, 1146);
             this.S_max_bar.Maximum = 255;
             this.S_max_bar.Name = "S_max_bar";
             this.S_max_bar.Size = new System.Drawing.Size(407, 56);
@@ -210,7 +204,7 @@
             // H_max_bar
             // 
             this.H_max_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.H_max_bar.Location = new System.Drawing.Point(467, 626);
+            this.H_max_bar.Location = new System.Drawing.Point(464, 1069);
             this.H_max_bar.Maximum = 255;
             this.H_max_bar.Name = "H_max_bar";
             this.H_max_bar.Size = new System.Drawing.Size(407, 56);
@@ -219,7 +213,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 607);
+            this.label1.Location = new System.Drawing.Point(16, 1050);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(62, 16);
             this.label1.TabIndex = 14;
@@ -228,7 +222,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(464, 607);
+            this.label2.Location = new System.Drawing.Point(461, 1050);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 16);
             this.label2.TabIndex = 15;
@@ -237,7 +231,7 @@
             // HSV_box
             // 
             this.HSV_box.BackColor = System.Drawing.Color.IndianRed;
-            this.HSV_box.Location = new System.Drawing.Point(891, 806);
+            this.HSV_box.Location = new System.Drawing.Point(464, 941);
             this.HSV_box.Name = "HSV_box";
             this.HSV_box.Size = new System.Drawing.Size(158, 22);
             this.HSV_box.TabIndex = 16;
@@ -245,17 +239,17 @@
             // Par2_bar
             // 
             this.Par2_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.Par2_bar.Location = new System.Drawing.Point(255, 903);
+            this.Par2_bar.Location = new System.Drawing.Point(15, 990);
             this.Par2_bar.Maximum = 255;
             this.Par2_bar.Name = "Par2_bar";
             this.Par2_bar.Size = new System.Drawing.Size(407, 56);
             this.Par2_bar.TabIndex = 18;
-            this.Par2_bar.Value = 14;
+            this.Par2_bar.Value = 10;
             // 
             // Par1_bar
             // 
             this.Par1_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.Par1_bar.Location = new System.Drawing.Point(255, 834);
+            this.Par1_bar.Location = new System.Drawing.Point(15, 921);
             this.Par1_bar.Maximum = 255;
             this.Par1_bar.Name = "Par1_bar";
             this.Par1_bar.Size = new System.Drawing.Size(407, 56);
@@ -265,17 +259,86 @@
             // Par_box
             // 
             this.Par_box.BackColor = System.Drawing.Color.IndianRed;
-            this.Par_box.Location = new System.Drawing.Point(891, 848);
+            this.Par_box.Location = new System.Drawing.Point(464, 983);
             this.Par_box.Name = "Par_box";
             this.Par_box.Size = new System.Drawing.Size(158, 22);
             this.Par_box.TabIndex = 19;
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.Color.IndianRed;
+            this.textBox1.Location = new System.Drawing.Point(891, 237);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(158, 22);
+            this.textBox1.TabIndex = 21;
+            // 
+            // textBox2
+            // 
+            this.textBox2.BackColor = System.Drawing.Color.IndianRed;
+            this.textBox2.Location = new System.Drawing.Point(891, 181);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(158, 22);
+            this.textBox2.TabIndex = 20;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(888, 162);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(95, 16);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "PIxel coordinat";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(888, 218);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(130, 16);
+            this.label4.TabIndex = 23;
+            this.label4.Text = "Real world coordinat";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(12, 875);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(142, 32);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "Dev mode";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(463, 922);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(73, 16);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "Hsv param";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(463, 964);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(130, 16);
+            this.label7.TabIndex = 26;
+            this.label7.Text = "HoughCircles param";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(1405, 954);
+            this.ClientSize = new System.Drawing.Size(1405, 744);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.Par_box);
             this.Controls.Add(this.Par2_bar);
             this.Controls.Add(this.Par1_bar);
@@ -291,7 +354,6 @@
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.Open_but);
-            this.Controls.Add(this.listView1);
             this.Controls.Add(this.Refr_but);
             this.Controls.Add(this.Cam_but);
             this.Controls.Add(this.pictureBox2);
@@ -321,7 +383,6 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button Cam_but;
         private System.Windows.Forms.Button Refr_but;
-        private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button Open_but;
@@ -339,6 +400,13 @@
         private System.Windows.Forms.TrackBar Par2_bar;
         private System.Windows.Forms.TrackBar Par1_bar;
         private System.Windows.Forms.TextBox Par_box;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
     }
 }
 
