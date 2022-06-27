@@ -74,7 +74,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.IndianRed;
+            this.pictureBox1.BackColor = System.Drawing.Color.Pink;
             this.pictureBox1.Location = new System.Drawing.Point(22, 18);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(640, 480);
@@ -84,8 +84,8 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.IndianRed;
-            this.pictureBox2.Location = new System.Drawing.Point(1076, 3);
+            this.pictureBox2.BackColor = System.Drawing.Color.Pink;
+            this.pictureBox2.Location = new System.Drawing.Point(885, 12);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(320, 240);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -94,11 +94,11 @@
             // 
             // Cam_but
             // 
-            this.Cam_but.BackColor = System.Drawing.Color.IndianRed;
-            this.Cam_but.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.Cam_but.Location = new System.Drawing.Point(891, 70);
+            this.Cam_but.BackColor = System.Drawing.Color.Pink;
+            this.Cam_but.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Cam_but.Location = new System.Drawing.Point(510, 639);
             this.Cam_but.Name = "Cam_but";
-            this.Cam_but.Size = new System.Drawing.Size(158, 32);
+            this.Cam_but.Size = new System.Drawing.Size(154, 92);
             this.Cam_but.TabIndex = 2;
             this.Cam_but.Text = "Start cam";
             this.Cam_but.UseVisualStyleBackColor = false;
@@ -106,11 +106,11 @@
             // 
             // Refr_but
             // 
-            this.Refr_but.BackColor = System.Drawing.Color.IndianRed;
-            this.Refr_but.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.Refr_but.Location = new System.Drawing.Point(891, 108);
+            this.Refr_but.BackColor = System.Drawing.Color.Pink;
+            this.Refr_but.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Refr_but.Location = new System.Drawing.Point(700, 639);
             this.Refr_but.Name = "Refr_but";
-            this.Refr_but.Size = new System.Drawing.Size(158, 33);
+            this.Refr_but.Size = new System.Drawing.Size(152, 90);
             this.Refr_but.TabIndex = 3;
             this.Refr_but.Text = "Refresh";
             this.Refr_but.UseVisualStyleBackColor = false;
@@ -126,11 +126,11 @@
             // 
             // Open_but
             // 
-            this.Open_but.BackColor = System.Drawing.Color.IndianRed;
-            this.Open_but.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.Open_but.Location = new System.Drawing.Point(891, 29);
+            this.Open_but.BackColor = System.Drawing.Color.Pink;
+            this.Open_but.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Open_but.Location = new System.Drawing.Point(309, 639);
             this.Open_but.Name = "Open_but";
-            this.Open_but.Size = new System.Drawing.Size(158, 35);
+            this.Open_but.Size = new System.Drawing.Size(155, 92);
             this.Open_but.TabIndex = 5;
             this.Open_but.Text = "Open video";
             this.Open_but.UseVisualStyleBackColor = false;
@@ -138,8 +138,8 @@
             // 
             // pictureBox3
             // 
-            this.pictureBox3.BackColor = System.Drawing.Color.IndianRed;
-            this.pictureBox3.Location = new System.Drawing.Point(1076, 249);
+            this.pictureBox3.BackColor = System.Drawing.Color.Pink;
+            this.pictureBox3.Location = new System.Drawing.Point(885, 258);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(320, 240);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -148,8 +148,8 @@
             // 
             // pictureBox4
             // 
-            this.pictureBox4.BackColor = System.Drawing.Color.IndianRed;
-            this.pictureBox4.Location = new System.Drawing.Point(1076, 495);
+            this.pictureBox4.BackColor = System.Drawing.Color.Pink;
+            this.pictureBox4.Location = new System.Drawing.Point(885, 504);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(320, 240);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -266,16 +266,18 @@
             // 
             // Real_coord
             // 
-            this.Real_coord.BackColor = System.Drawing.Color.IndianRed;
-            this.Real_coord.Location = new System.Drawing.Point(22, 712);
+            this.Real_coord.BackColor = System.Drawing.Color.Pink;
+            this.Real_coord.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Real_coord.Location = new System.Drawing.Point(23, 707);
             this.Real_coord.Name = "Real_coord";
             this.Real_coord.Size = new System.Drawing.Size(257, 22);
             this.Real_coord.TabIndex = 21;
             // 
             // Pix_coord
             // 
-            this.Pix_coord.BackColor = System.Drawing.Color.IndianRed;
-            this.Pix_coord.Location = new System.Drawing.Point(22, 656);
+            this.Pix_coord.BackColor = System.Drawing.Color.Pink;
+            this.Pix_coord.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Pix_coord.Location = new System.Drawing.Point(23, 651);
             this.Pix_coord.Name = "Pix_coord";
             this.Pix_coord.Size = new System.Drawing.Size(257, 22);
             this.Pix_coord.TabIndex = 20;
@@ -283,7 +285,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(19, 637);
+            this.label3.Location = new System.Drawing.Point(20, 632);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(95, 16);
             this.label3.TabIndex = 22;
@@ -292,11 +294,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(19, 693);
+            this.label4.Location = new System.Drawing.Point(20, 688);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(130, 16);
+            this.label4.Size = new System.Drawing.Size(164, 16);
             this.label4.TabIndex = 23;
-            this.label4.Text = "Real world coordinat";
+            this.label4.Text = "Real world coordinat in cm";
             // 
             // label5
             // 
@@ -331,7 +333,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(1405, 744);
+            this.ClientSize = new System.Drawing.Size(1217, 753);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
