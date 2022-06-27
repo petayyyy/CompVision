@@ -26,6 +26,8 @@ namespace Ing_progect
         }
         int[] ball_hsv = { 14, 81, 107, 100, 169, 255 };
         int real_size_ball = 67; // in mm
+        double height_mm = 4.2;
+        double width_mm = 3.9;
         Mat input_flow = new Mat();
         Mat output_flow = new Mat();
         Mat pyr_flow = new Mat();
@@ -63,6 +65,7 @@ namespace Ing_progect
                 }
             }
             CircleSegment[] circles;
+            red_flow = new Mat();
             // BGR to GRAY
             Cv2.CvtColor(input_flow, gray_flow, ColorConversionCodes.BGR2GRAY);
             // blur
@@ -72,7 +75,6 @@ namespace Ing_progect
             // to canny
             Cv2.Canny(gray_flow, canny_flow, 100, 150);
             //Cv2.FindContours(canny_flow, out OpenCvSharp.Point[][] canny_countors, out HierarchyIndex[] canny_hierarchyIndexes, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
-
             // to hsv
             Cv2.GaussianBlur(input_flow, output_flow, new OpenCvSharp.Size(33, 33), 0);
             Cv2.CvtColor(output_flow, output_flow, ColorConversionCodes.BGR2HSV);
@@ -80,7 +82,7 @@ namespace Ing_progect
             Cv2.Erode(blue_flow, blue_flow, null, iterations: 2);
             Cv2.Dilate(blue_flow, blue_flow, null, iterations: 2);
             Cv2.FindContours(blue_flow, out OpenCvSharp.Point[][] countors, out HierarchyIndex[] hierarchyIndexes, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
-
+            Cv2.BitwiseAnd(input_flow, input_flow, red_flow, mask: blue_flow);
             for (int i = 0; i < countors.Length; i++)
             {
                 Moments mom = Cv2.Moments(countors[i], true);
@@ -102,6 +104,8 @@ namespace Ing_progect
                     {
                         Cv2.PutText(input_flow, coord.ToString(), (OpenCvSharp.Point)coord, HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
                         Cv2.Circle(input_flow, (OpenCvSharp.Point)coord, (int)rad, Scalar.FromRgb(255, 0, 255), 1);
+                        Pix_coord.Text = coord.ToString();
+                        Real_coord.Text = convert_to_real(coord, rad).ToString();
                     }
                 } 
             }
@@ -212,17 +216,26 @@ namespace Ing_progect
             */
             pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
             pictureBox1.Refresh();
-            pictureBox2.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(canny_flow);
+            pictureBox2.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(blue_flow);
             pictureBox2.Refresh();
-            pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(pyr_flow);
+            try
+            {
+                pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(pyr_flow);
+            }
+            catch { }
             pictureBox3.Refresh();
-            pictureBox4.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(blue_flow);
+            pictureBox4.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(red_flow);
             pictureBox4.Refresh();
         }
         public bool check_circl(CircleSegment circle, OpenCvSharp.Point ball_point)
         {
             if (Math.Pow((ball_point.X-circle.Center.X),2) + Math.Pow((ball_point.Y - circle.Center.Y), 2) < circle.Radius) return true;
             return false;
+        }
+        public OpenCvSharp.Point2f convert_to_real(OpenCvSharp.Point2f cor, float radius)
+        {
+
+            return new OpenCvSharp.Point2f(cor.X, cor.Y);
         }
         private void Cam_but_Click_1(object sender, EventArgs e)
         {

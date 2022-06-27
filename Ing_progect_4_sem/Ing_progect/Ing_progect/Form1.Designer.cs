@@ -51,8 +51,8 @@
             this.Par2_bar = new System.Windows.Forms.TrackBar();
             this.Par1_bar = new System.Windows.Forms.TrackBar();
             this.Par_box = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.Real_coord = new System.Windows.Forms.TextBox();
+            this.Pix_coord = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -264,21 +264,21 @@
             this.Par_box.Size = new System.Drawing.Size(158, 22);
             this.Par_box.TabIndex = 19;
             // 
-            // textBox1
+            // Real_coord
             // 
-            this.textBox1.BackColor = System.Drawing.Color.IndianRed;
-            this.textBox1.Location = new System.Drawing.Point(891, 237);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(158, 22);
-            this.textBox1.TabIndex = 21;
+            this.Real_coord.BackColor = System.Drawing.Color.IndianRed;
+            this.Real_coord.Location = new System.Drawing.Point(891, 237);
+            this.Real_coord.Name = "Real_coord";
+            this.Real_coord.Size = new System.Drawing.Size(158, 22);
+            this.Real_coord.TabIndex = 21;
             // 
-            // textBox2
+            // Pix_coord
             // 
-            this.textBox2.BackColor = System.Drawing.Color.IndianRed;
-            this.textBox2.Location = new System.Drawing.Point(891, 181);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(158, 22);
-            this.textBox2.TabIndex = 20;
+            this.Pix_coord.BackColor = System.Drawing.Color.IndianRed;
+            this.Pix_coord.Location = new System.Drawing.Point(891, 181);
+            this.Pix_coord.Name = "Pix_coord";
+            this.Pix_coord.Size = new System.Drawing.Size(158, 22);
+            this.Pix_coord.TabIndex = 20;
             // 
             // label3
             // 
@@ -337,8 +337,8 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.Real_coord);
+            this.Controls.Add(this.Pix_coord);
             this.Controls.Add(this.Par_box);
             this.Controls.Add(this.Par2_bar);
             this.Controls.Add(this.Par1_bar);
@@ -400,8 +400,8 @@
         private System.Windows.Forms.TrackBar Par2_bar;
         private System.Windows.Forms.TrackBar Par1_bar;
         private System.Windows.Forms.TextBox Par_box;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox Real_coord;
+        private System.Windows.Forms.TextBox Pix_coord;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
