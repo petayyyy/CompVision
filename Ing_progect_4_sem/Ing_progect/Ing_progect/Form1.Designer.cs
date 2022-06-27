@@ -267,23 +267,23 @@
             // Real_coord
             // 
             this.Real_coord.BackColor = System.Drawing.Color.IndianRed;
-            this.Real_coord.Location = new System.Drawing.Point(891, 237);
+            this.Real_coord.Location = new System.Drawing.Point(22, 712);
             this.Real_coord.Name = "Real_coord";
-            this.Real_coord.Size = new System.Drawing.Size(158, 22);
+            this.Real_coord.Size = new System.Drawing.Size(257, 22);
             this.Real_coord.TabIndex = 21;
             // 
             // Pix_coord
             // 
             this.Pix_coord.BackColor = System.Drawing.Color.IndianRed;
-            this.Pix_coord.Location = new System.Drawing.Point(891, 181);
+            this.Pix_coord.Location = new System.Drawing.Point(22, 656);
             this.Pix_coord.Name = "Pix_coord";
-            this.Pix_coord.Size = new System.Drawing.Size(158, 22);
+            this.Pix_coord.Size = new System.Drawing.Size(257, 22);
             this.Pix_coord.TabIndex = 20;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(888, 162);
+            this.label3.Location = new System.Drawing.Point(19, 637);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(95, 16);
             this.label3.TabIndex = 22;
@@ -292,7 +292,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(888, 218);
+            this.label4.Location = new System.Drawing.Point(19, 693);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(130, 16);
             this.label4.TabIndex = 23;
