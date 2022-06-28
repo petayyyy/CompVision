@@ -72,11 +72,11 @@ namespace Ing_progect
 
             // BGR to GRAY
             Cv2.CvtColor(input_flow, gray_flow, ColorConversionCodes.BGR2GRAY);
-            
+
             // to canny
             //Cv2.Canny(gray_flow, canny_flow, 100, 150);
             //Cv2.FindContours(canny_flow, out OpenCvSharp.Point[][] canny_countors, out HierarchyIndex[] canny_hierarchyIndexes, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
-        
+
             // blur
             Cv2.GaussianBlur(input_flow, output_flow, new OpenCvSharp.Size(33, 33), 0);
             // to hsv
@@ -104,12 +104,12 @@ namespace Ing_progect
                         }
                         else pyr_flow = new Mat(pyr_flow, new Rect((int)coord.X - (int)rad, (int)coord.Y - (int)rad, (int)rad * 2, (int)rad * 2));
                     }
-                                        circles = Cv2.HoughCircles(pyr_flow, HoughModes.Gradient, 1, gray_flow.Height / 8, Par1_bar.Value, Par2_bar.Value, 0, 0);
+                    circles = Cv2.HoughCircles(pyr_flow, HoughModes.Gradient, 1, gray_flow.Height / 8, Par1_bar.Value, Par2_bar.Value, 0, 0);
                     if (circles.Length > 0 && circles.Length < 10)
                     {
                         balls_coord.Add(new CircleSegment(coord, rad));
                     }
-                } 
+                }
             }
             if (balls_coord.Count > 0)
             {
@@ -126,7 +126,7 @@ namespace Ing_progect
                             //OpenCvSharp.CircleSegment ball_coord = new OpenCvSharp.CircleSegment(new Point2f(x,y), balls_coord[i].Radius + balls_coord[j].Radius);
                             balls_coord.RemoveAt(j);
                             break;
-                        }else j++;
+                        } else j++;
                     }
                     i++;
                 }
@@ -134,12 +134,19 @@ namespace Ing_progect
             //Cv2.PutText(input_flow, balls_coord.Count.ToString(), new OpenCvSharp.Point(600, 400), HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
             for (int j = 0; j < balls_coord.Count; j++)
             {
-               // Cv2.PutText(input_flow, balls_coord[j].Center.ToString(), (OpenCvSharp.Point)balls_coord[j].Center, HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
+                // Cv2.PutText(input_flow, balls_coord[j].Center.ToString(), (OpenCvSharp.Point)balls_coord[j].Center, HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
                 Cv2.Circle(input_flow, (OpenCvSharp.Point)balls_coord[j].Center, (int)balls_coord[j].Radius, Scalar.FromRgb(255, 0, 255), 1);
                 Cv2.Circle(input_flow, (OpenCvSharp.Point)balls_coord[j].Center, 1, Scalar.FromRgb(0, 0, 0), 1);
                 Pix_coord.Text = balls_coord[j].Center.ToString();
                 Real_coord.Text = convert_to_real(balls_coord[j].Center, balls_coord[j].Radius).ToString();
             }
+            //Mat cam;
+            float[,] cam = new float[,] { { 620.8105129721316f, 0.0f, 334.14283300752237f }, { 0.0f, 620.9212497520964f, 254.91540464031397f }, {0.0f, 1.0f, 0.0f } };
+            Mat cam_matrix = new Mat(3, 3, MatType.CV_32FC1, cam);
+            float[] dist = new float[] { 0.38680037456334865f, 0.02693495618010857f, 0.0037255891539574077f, 0.0023346804115650477f, 0.31592602673635367f};
+            Mat dis_coef = new Mat(5, 1, MatType.CV_32FC1, dist);
+            Mat kd = input_flow.Clone();
+            Cv2.Undistort(input_flow, kd, cam_matrix, dis_coef, cam_matrix);
             Cv2.Line(input_flow, 0, 240, 640, 240, Scalar.FromRgb(255, 0, 0));
             Cv2.Line(input_flow, 320, 0, 320, 480, Scalar.FromRgb(255, 0, 0));
             
@@ -149,7 +156,8 @@ namespace Ing_progect
             pictureBox2.Refresh();
             try
             {
-                pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(pyr_flow);
+                //pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(pyr_flow);
+                pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(kd);
             }
             catch { }
             pictureBox3.Refresh();
