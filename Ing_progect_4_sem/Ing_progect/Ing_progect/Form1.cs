@@ -138,13 +138,16 @@ namespace Ing_progect
                 Cv2.Circle(input_flow, (OpenCvSharp.Point)balls_coord[j].Center, (int)balls_coord[j].Radius, Scalar.FromRgb(255, 0, 255), 1);
                 Cv2.Circle(input_flow, (OpenCvSharp.Point)balls_coord[j].Center, 1, Scalar.FromRgb(0, 0, 0), 1);
                 Pix_coord.Text = balls_coord[j].Center.ToString();
-                Real_coord.Text = convert_to_real(balls_coord[j].Center, balls_coord[j].Radius).ToString();
+                //Real_coord.Text = convert_to_real(balls_coord[j].Center, balls_coord[j].Radius, countors).ToString();
             }
             //Mat cam;
-            float[,] cam = new float[,] { { 620.8105129721316f, 0.0f, 334.14283300752237f }, { 0.0f, 620.9212497520964f, 254.91540464031397f }, {0.0f, 1.0f, 0.0f } };
+            float[,] cam = new float[,] { { 1.35662728e+03f, 0.0f, 2.91998600e+02f }, { 0.0f, 1.37532524e+03f, 2.25387379e+02f }, { 0.0f, 0.0f, 1.0f } };
             Mat cam_matrix = new Mat(3, 3, MatType.CV_32FC1, cam);
-            float[] dist = new float[] { -0.38680037456334865f, 0.02693495618010857f, 0.0037255891539574077f, 0.0023346804115650477f, 0.31592602673635367f};
-            Mat dis_coef = new Mat(5, 1, MatType.CV_32FC1, dist);
+
+            // Dist coef
+            float[] dist = new float[] { -1.32575155e+00f, -7.35188200e+00f, 4.29782934e-02f, 7.66436446e-02f, 5.18928027e+01f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f };
+            
+            Mat dis_coef = new Mat(14, 1, MatType.CV_32FC1, dist);
             Mat kd = input_flow.Clone();
             Cv2.Undistort(input_flow, kd, cam_matrix, dis_coef, cam_matrix);
             Cv2.Line(input_flow, 0, 240, 640, 240, Scalar.FromRgb(255, 0, 0));
@@ -168,7 +171,8 @@ namespace Ing_progect
             try
             {
                 //pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(pyr_flow);
-                pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(gg);
+                //pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(gg);
+                pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(kd);
             }
             catch { }
             pictureBox3.Refresh();
@@ -184,12 +188,39 @@ namespace Ing_progect
             if (Math.Pow((ball_point.X-circle.Center.X),2) + Math.Pow((ball_point.Y - circle.Center.Y), 2) < circle.Radius) return true;
             return false;
         }
-        public OpenCvSharp.Point3f convert_to_real(OpenCvSharp.Point2f cor, float radius)
+        public void convert_to_real(OpenCvSharp.Point2f cor, float radius, OpenCvSharp.Point[][] co)
         {
-            float dist = (float)(real_size_ball * F) / (radius * 2);
-            float x = (float)((cor.X - c_x) * dist) / f_x;
-            float y = (float)((cor.Y - c_y) * dist) / f_y;
-            return new OpenCvSharp.Point3f(x,y,dist/10);
+            float[,] cam = new float[,] { { 1.35662728e+03f, 0.0f, 2.91998600e+02f }, { 0.0f, 1.37532524e+03f, 2.25387379e+02f }, { 0.0f, 0.0f, 1.0f } };
+
+            //float[,] cam = new float[,] { { 1.35662728e+03f, 0.0f, 2.91998600e+02f }, { 0.0f, 1.37532524e+03f, 2.25387379e+02f }, { 0.0f, 1.0f, 0.0f } };
+            //float[,] cam = new float[,] { { 836.43486713f, 0.0f, 294.58687445f }, { 0.0f, 842.81954877f, 249.9729372f }, { 0.0f, 0.0f, 1.0f } };
+            //float[,] cam = new float[,] { { 384.38634628f, 0.0f, 327.07181477f }, { 0.0f, 384.17610627f, 218.46209394f }, {0.0f, 1.0f, 0.0f } };
+            //float[,] cam = new float[,] { { 594.41588751f, 0.0f, 342.01499465f }, { 0.0f, 593.61353185f, 260.80928372f }, { 0.0f, 1.0f, 0.0f } };
+            //float[,] cam = new float[,] { { 384.38634628f, 0.0f, 327.07181477f }, { 0.0f, 384.17610627f, 218.46209394f }, {0.0f, 1.0f, 0.0f } };
+
+            Mat cam_matrix = new Mat(3, 3, MatType.CV_32FC1, cam);
+            
+            float[] dist = new float[] { -1.32575155e+00f, -7.35188200e+00f, 4.29782934e-02f, 7.66436446e-02f, 5.18928027e+01f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f };
+
+            //float[] dist = new float[] { -1.32575155e+00f, -7.35188200e+00f,  4.29782934e-02f,  7.66436446e-02f,   5.18928027e+01f };
+            //float[] dist = new float[] { -0.69684801f,  0.30941318f,  0.0054045f,   0.0306378f, - 0.1816169f };
+            //float[] dist = new float[] { -0.17301207f,  0.09056879f,  0.01747594f,  0.00520352f, - 0.06289513f };
+            //float[] dist = new float[] { -0.38546214f, 0.19666007f, -0.0012472f, -0.00058776f, -0.03012067f };
+            //float[] dist = new float[] { -0.17301207f,  0.09056879f,  0.01747594f,  0.00520352f, - 0.06289513f };
+            Mat dis_coef = new Mat(5, 1, MatType.CV_32FC1, dist);
+
+            float[,] ball = new float[,] { { cor.X - radius, cor.Y - radius }, { cor.X + radius, cor.Y }, { cor.X + radius, cor.Y + radius }, { cor.X - radius, cor.Y + radius } };
+            //float[,] cam = new float[,] { { 384.38634628f, 0.0f, 327.07181477f }, { 0.0f, 384.17610627f, 218.46209394f }, {0.0f, 1.0f, 0.0f } };
+            Mat ball_mat = new Mat(4, 2, MatType.CV_32FC1, ball);
+            //Point2f[][] fs = new Point2f[4][] { { new Point2f(cor.X - radius, cor.Y - radius) }, { new Point2f(cor.X + radius, cor.Y )}, { new Point2f(cor.X + radius, cor.Y + radius) }, { new Point2f(cor.X - radius, cor.Y + radius) } };
+
+            //OpenCvSharp.Aruco.CvAruco.EstimatePoseSingleMarkers(co, real_size_ball, cam_matrix, dis_coef, out Mat rvec, out Mat tvec);
+
+            //float dist = (float)(real_size_ball * F) / (radius * 2);
+            //float x = (float)((cor.X - c_x) * dist) / f_x;
+            //float y = (float)((cor.Y - c_y) * dist) / f_y;
+            //return new OpenCvSharp.Point3f(x,y,dist/10);
+            //return;
         }
         private void Cam_but_Click_1(object sender, EventArgs e)
         {
