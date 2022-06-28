@@ -164,6 +164,7 @@ namespace Ing_progect
             Cv2.WarpPerspective(input_flow, gg, gg, new OpenCvSharp.Size(100, 100));
             ////////////////////////////////////////
 
+            //pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
             pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_calibr);
             pictureBox1.Refresh();
             pictureBox2.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(blue_flow);
@@ -197,6 +198,7 @@ namespace Ing_progect
             
             Mat recv = new Mat();
             Mat tvec = new Mat();
+            Mat points = new Mat();
             Cv2.SolvePnP(ball_mat, ball_pix, cam_matrix, dis_coef, recv, tvec);
             return tvec;
             //OpenCvSharp.Aruco.CvAruco.EstimatePoseSingleMarkers(co, real_size_ball, cam_matrix, dis_coef, out Mat rvec, out Mat tvec);
