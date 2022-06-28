@@ -296,9 +296,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(20, 688);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(164, 16);
+            this.label4.Size = new System.Drawing.Size(168, 16);
             this.label4.TabIndex = 23;
-            this.label4.Text = "Real world coordinat in cm";
+            this.label4.Text = "Real world coordinat in mm";
             // 
             // label5
             // 

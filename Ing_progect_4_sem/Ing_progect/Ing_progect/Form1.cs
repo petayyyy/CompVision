@@ -25,7 +25,14 @@ namespace Ing_progect
             V_max_bar.Value = ball_hsv[5];
         }
         int[] ball_hsv = { 14, 81, 107, 100, 169, 255 };
-        int real_size_ball = 67; // in mm
+        float  real_size_ball = 0.067f; // in m
+
+        //Mat cam;
+        Mat cam_matrix = new Mat(3, 3, MatType.CV_32FC1, new float[,] { { 1.35662728e+03f, 0.0f, 2.91998600e+02f }, { 0.0f, 1.37532524e+03f, 2.25387379e+02f }, { 0.0f, 0.0f, 1.0f } });
+
+        // Dist coef
+        Mat dis_coef = new Mat(14, 1, MatType.CV_32FC1, new float[] { -1.32575155e+00f, -7.35188200e+00f, 4.29782934e-02f, 7.66436446e-02f, 5.18928027e+01f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f });
+
         float F = (float)(102 * 2 * 200)/67;
         float f_x = 11639.393651724997f;
         float c_x = 318.9675783459194f;
@@ -47,6 +54,7 @@ namespace Ing_progect
         private void timer1_Tick(object sender, EventArgs e)
         {
             // bar to hsv 
+            Real_coord.Text = "";
             ball_hsv[0] = (int)H_min_bar.Value; ball_hsv[1] = (int)S_min_bar.Value; ball_hsv[2] = (int)V_min_bar.Value; ball_hsv[3] = (int)H_max_bar.Value; ball_hsv[4] = (int)S_max_bar.Value; ball_hsv[5] = (int)V_max_bar.Value;
             HSV_box.Text = H_min_bar.Value.ToString() + ", " + S_min_bar.Value.ToString() + ", " + V_min_bar.Value.ToString() + ", " + H_max_bar.Value.ToString() + ", " + S_max_bar.Value.ToString() + ", " + V_max_bar.Value.ToString();
             Par_box.Text = Par1_bar.Value.ToString() + ", " + Par2_bar.Value.ToString();
@@ -55,8 +63,8 @@ namespace Ing_progect
                 if (video_capture.IsOpened() && (is_cam || is_video))
                 {
                     video_capture.Read(input_flow);
-                    pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
-                    pictureBox1.Refresh();
+                    //pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
+                    //pictureBox1.Refresh();
                 }
             }
             catch
@@ -96,15 +104,15 @@ namespace Ing_progect
                     float rad;
                     pyr_flow = blue_flow.Clone();
                     Cv2.MinEnclosingCircle(OpenCvSharp.InputArray.Create(countors[i]), out OpenCvSharp.Point2f coord, out rad);
-                    if ((int)coord.X - (int)rad > 0 && (int)coord.Y - (int)rad > 0 && (int)rad * 2 + (int)coord.X < gray_flow.Width && (int)coord.Y + (int)rad * 2 < gray_flow.Height)
+                    if ((int)coord.X - (int)rad > 0 && (int)coord.Y - (int)rad > 0 && (int)rad * 2 + (int)coord.X < pyr_flow.Width && (int)coord.Y + (int)rad * 2 < pyr_flow.Height)
                     {
-                        if ((int)coord.X - (int)rad - (int)rad > 0 && (int)coord.Y - (int)rad - (int)rad > 0 && (int)rad * 4 + (int)coord.X < gray_flow.Width && (int)coord.Y + (int)rad * 4 < gray_flow.Height)
+                        if ((int)coord.X - (int)rad - (int)rad > 0 && (int)coord.Y - (int)rad - (int)rad > 0 && (int)rad * 4 + (int)coord.X < pyr_flow.Width && (int)coord.Y + (int)rad * 4 < pyr_flow.Height)
                         {
                             pyr_flow = new Mat(pyr_flow, new Rect((int)coord.X - (int)rad - (int)rad, (int)coord.Y - (int)rad - (int)rad, (int)rad * 4, (int)rad * 4));
                         }
                         else pyr_flow = new Mat(pyr_flow, new Rect((int)coord.X - (int)rad, (int)coord.Y - (int)rad, (int)rad * 2, (int)rad * 2));
                     }
-                    circles = Cv2.HoughCircles(pyr_flow, HoughModes.Gradient, 1, gray_flow.Height / 8, Par1_bar.Value, Par2_bar.Value, 0, 0);
+                    circles = Cv2.HoughCircles(pyr_flow, HoughModes.Gradient, 1, pyr_flow.Height / 8, Par1_bar.Value, Par2_bar.Value, 0, 0);
                     if (circles.Length > 0 && circles.Length < 10)
                     {
                         balls_coord.Add(new CircleSegment(coord, rad));
@@ -131,27 +139,19 @@ namespace Ing_progect
                     i++;
                 }
             }
-            //Cv2.PutText(input_flow, balls_coord.Count.ToString(), new OpenCvSharp.Point(600, 400), HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
             for (int j = 0; j < balls_coord.Count; j++)
             {
                 // Cv2.PutText(input_flow, balls_coord[j].Center.ToString(), (OpenCvSharp.Point)balls_coord[j].Center, HersheyFonts.Italic, 1, new Scalar(255, 0, 255));
-                Cv2.Circle(input_flow, (OpenCvSharp.Point)balls_coord[j].Center, (int)balls_coord[j].Radius, Scalar.FromRgb(255, 0, 255), 1);
-                Cv2.Circle(input_flow, (OpenCvSharp.Point)balls_coord[j].Center, 1, Scalar.FromRgb(0, 0, 0), 1);
+                Cv2.Circle(input_flow, (OpenCvSharp.Point)balls_coord[j].Center, (int)balls_coord[j].Radius, Scalar.FromRgb(255, 0, 255), 5);
+                Cv2.Circle(input_flow, (OpenCvSharp.Point)balls_coord[j].Center, 1, Scalar.FromRgb(255, 0, 0), 2);
                 Pix_coord.Text = balls_coord[j].Center.ToString();
-                //Real_coord.Text = convert_to_real(balls_coord[j].Center, balls_coord[j].Radius, countors).ToString();
+                Mat tvec = convert_to_real(balls_coord[j].Center, balls_coord[j].Radius);
+                Real_coord.Text = "x: "+ Math.Round(tvec.Get<double>(0),3).ToString() + "; y: " + Math.Round(tvec.Get<double>(1), 3).ToString() + "; z: " + Math.Round(tvec.Get<double>(2), 3).ToString();
             }
-            //Mat cam;
-            float[,] cam = new float[,] { { 1.35662728e+03f, 0.0f, 2.91998600e+02f }, { 0.0f, 1.37532524e+03f, 2.25387379e+02f }, { 0.0f, 0.0f, 1.0f } };
-            Mat cam_matrix = new Mat(3, 3, MatType.CV_32FC1, cam);
-
-            // Dist coef
-            float[] dist = new float[] { -1.32575155e+00f, -7.35188200e+00f, 4.29782934e-02f, 7.66436446e-02f, 5.18928027e+01f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f };
-            
-            Mat dis_coef = new Mat(14, 1, MatType.CV_32FC1, dist);
-            Mat kd = input_flow.Clone();
-            Cv2.Undistort(input_flow, kd, cam_matrix, dis_coef, cam_matrix);
-            Cv2.Line(input_flow, 0, 240, 640, 240, Scalar.FromRgb(255, 0, 0));
-            Cv2.Line(input_flow, 320, 0, 320, 480, Scalar.FromRgb(255, 0, 0));
+            Mat input_calibr = input_flow.Clone();
+            Cv2.Undistort(input_flow, input_calibr, cam_matrix, dis_coef, cam_matrix);
+            Cv2.Line(input_calibr, 0, 240, 640, 240, Scalar.FromRgb(255, 0, 0));
+            Cv2.Line(input_calibr, 320, 0, 320, 480, Scalar.FromRgb(255, 0, 0));
 
             // A4 work zone ////////////////////////
             float[,] A4 = new float[,] { { 120f, 140f }, { 220f, 145f}, { 130.0f, 200.0f }, { 230.0f, 190.0f }};
@@ -164,15 +164,15 @@ namespace Ing_progect
             Cv2.WarpPerspective(input_flow, gg, gg, new OpenCvSharp.Size(100, 100));
             ////////////////////////////////////////
 
-            pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
+            pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_calibr);
             pictureBox1.Refresh();
             pictureBox2.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(blue_flow);
             pictureBox2.Refresh();
             try
             {
-                //pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(pyr_flow);
+                pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(pyr_flow);
                 //pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(gg);
-                pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(kd);
+                //pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_calibr);
             }
             catch { }
             pictureBox3.Refresh();
@@ -188,32 +188,17 @@ namespace Ing_progect
             if (Math.Pow((ball_point.X-circle.Center.X),2) + Math.Pow((ball_point.Y - circle.Center.Y), 2) < circle.Radius) return true;
             return false;
         }
-        public void convert_to_real(OpenCvSharp.Point2f cor, float radius, OpenCvSharp.Point[][] co)
-        {
-            float[,] cam = new float[,] { { 1.35662728e+03f, 0.0f, 2.91998600e+02f }, { 0.0f, 1.37532524e+03f, 2.25387379e+02f }, { 0.0f, 0.0f, 1.0f } };
-
-            //float[,] cam = new float[,] { { 1.35662728e+03f, 0.0f, 2.91998600e+02f }, { 0.0f, 1.37532524e+03f, 2.25387379e+02f }, { 0.0f, 1.0f, 0.0f } };
-            //float[,] cam = new float[,] { { 836.43486713f, 0.0f, 294.58687445f }, { 0.0f, 842.81954877f, 249.9729372f }, { 0.0f, 0.0f, 1.0f } };
-            //float[,] cam = new float[,] { { 384.38634628f, 0.0f, 327.07181477f }, { 0.0f, 384.17610627f, 218.46209394f }, {0.0f, 1.0f, 0.0f } };
-            //float[,] cam = new float[,] { { 594.41588751f, 0.0f, 342.01499465f }, { 0.0f, 593.61353185f, 260.80928372f }, { 0.0f, 1.0f, 0.0f } };
-            //float[,] cam = new float[,] { { 384.38634628f, 0.0f, 327.07181477f }, { 0.0f, 384.17610627f, 218.46209394f }, {0.0f, 1.0f, 0.0f } };
-
-            Mat cam_matrix = new Mat(3, 3, MatType.CV_32FC1, cam);
+        public Mat convert_to_real(OpenCvSharp.Point2f cor, float radius)
+        {            
+            float[,] ball = new float[,] { { cor.X - radius, cor.Y - radius },                         { cor.X + radius, cor.Y - radius },                          { cor.X + radius, cor.Y + radius },                          { cor.X - radius, cor.Y + radius }                          };
+            float[,] real = new float[,] { { -(float)real_size_ball/2, -(float)real_size_ball / 2, 0}, { (float)real_size_ball / 2, -(float)real_size_ball / 2, 0}, { (float)real_size_ball / 2, (float)real_size_ball / 2, 0 }, { -(float)real_size_ball / 2, (float)real_size_ball / 2, 0} };
+            Mat ball_mat = new Mat(4, 3, MatType.CV_32F, real);
+            Mat ball_pix = new Mat(4, 2, MatType.CV_32F, ball);
             
-            float[] dist = new float[] { -1.32575155e+00f, -7.35188200e+00f, 4.29782934e-02f, 7.66436446e-02f, 5.18928027e+01f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f, 0.00000000e+00f };
-
-            //float[] dist = new float[] { -1.32575155e+00f, -7.35188200e+00f,  4.29782934e-02f,  7.66436446e-02f,   5.18928027e+01f };
-            //float[] dist = new float[] { -0.69684801f,  0.30941318f,  0.0054045f,   0.0306378f, - 0.1816169f };
-            //float[] dist = new float[] { -0.17301207f,  0.09056879f,  0.01747594f,  0.00520352f, - 0.06289513f };
-            //float[] dist = new float[] { -0.38546214f, 0.19666007f, -0.0012472f, -0.00058776f, -0.03012067f };
-            //float[] dist = new float[] { -0.17301207f,  0.09056879f,  0.01747594f,  0.00520352f, - 0.06289513f };
-            Mat dis_coef = new Mat(5, 1, MatType.CV_32FC1, dist);
-
-            float[,] ball = new float[,] { { cor.X - radius, cor.Y - radius }, { cor.X + radius, cor.Y }, { cor.X + radius, cor.Y + radius }, { cor.X - radius, cor.Y + radius } };
-            //float[,] cam = new float[,] { { 384.38634628f, 0.0f, 327.07181477f }, { 0.0f, 384.17610627f, 218.46209394f }, {0.0f, 1.0f, 0.0f } };
-            Mat ball_mat = new Mat(4, 2, MatType.CV_32FC1, ball);
-            //Point2f[][] fs = new Point2f[4][] { { new Point2f(cor.X - radius, cor.Y - radius) }, { new Point2f(cor.X + radius, cor.Y )}, { new Point2f(cor.X + radius, cor.Y + radius) }, { new Point2f(cor.X - radius, cor.Y + radius) } };
-
+            Mat recv = new Mat();
+            Mat tvec = new Mat();
+            Cv2.SolvePnP(ball_mat, ball_pix, cam_matrix, dis_coef, recv, tvec);
+            return tvec;
             //OpenCvSharp.Aruco.CvAruco.EstimatePoseSingleMarkers(co, real_size_ball, cam_matrix, dis_coef, out Mat rvec, out Mat tvec);
 
             //float dist = (float)(real_size_ball * F) / (radius * 2);
