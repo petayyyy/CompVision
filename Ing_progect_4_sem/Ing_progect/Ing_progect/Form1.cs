@@ -143,13 +143,24 @@ namespace Ing_progect
             //Mat cam;
             float[,] cam = new float[,] { { 620.8105129721316f, 0.0f, 334.14283300752237f }, { 0.0f, 620.9212497520964f, 254.91540464031397f }, {0.0f, 1.0f, 0.0f } };
             Mat cam_matrix = new Mat(3, 3, MatType.CV_32FC1, cam);
-            float[] dist = new float[] { 0.38680037456334865f, 0.02693495618010857f, 0.0037255891539574077f, 0.0023346804115650477f, 0.31592602673635367f};
+            float[] dist = new float[] { -0.38680037456334865f, 0.02693495618010857f, 0.0037255891539574077f, 0.0023346804115650477f, 0.31592602673635367f};
             Mat dis_coef = new Mat(5, 1, MatType.CV_32FC1, dist);
             Mat kd = input_flow.Clone();
             Cv2.Undistort(input_flow, kd, cam_matrix, dis_coef, cam_matrix);
             Cv2.Line(input_flow, 0, 240, 640, 240, Scalar.FromRgb(255, 0, 0));
             Cv2.Line(input_flow, 320, 0, 320, 480, Scalar.FromRgb(255, 0, 0));
-            
+
+            // A4 work zone ////////////////////////
+            float[,] A4 = new float[,] { { 120f, 140f }, { 220f, 145f}, { 130.0f, 200.0f }, { 230.0f, 190.0f }};
+            float[,] A = new float[,] { { 100f, 100f }, { 200f, 100f}, { 100.0f, 300.0f }, { 200.0f, 200.0f } };
+
+            Mat A4_matrix = new Mat(4, 2, MatType.CV_32F, A4);
+            Mat A_matrix = new Mat(4, 2, MatType.CV_32F, A);
+
+            Mat gg = Cv2.GetPerspectiveTransform(A4_matrix, A_matrix);
+            Cv2.WarpPerspective(input_flow, gg, gg, new OpenCvSharp.Size(100, 100));
+            ////////////////////////////////////////
+
             pictureBox1.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(input_flow);
             pictureBox1.Refresh();
             pictureBox2.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(blue_flow);
@@ -157,7 +168,7 @@ namespace Ing_progect
             try
             {
                 //pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(pyr_flow);
-                pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(kd);
+                pictureBox3.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(gg);
             }
             catch { }
             pictureBox3.Refresh();
