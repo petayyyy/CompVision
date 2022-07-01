@@ -58,6 +58,16 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.Angles_box = new System.Windows.Forms.TextBox();
+            this.Final_pointX_bar = new System.Windows.Forms.TrackBar();
+            this.Final_pointY_bar = new System.Windows.Forms.TrackBar();
+            this.Otrisovka = new System.Windows.Forms.PictureBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.FP_box = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.Range_box = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -70,6 +80,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.H_max_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Par2_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Par1_bar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Final_pointX_bar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Final_pointY_bar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Otrisovka)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -81,11 +94,12 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_Click);
             // 
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Pink;
-            this.pictureBox2.Location = new System.Drawing.Point(885, 12);
+            this.pictureBox2.Location = new System.Drawing.Point(943, 12);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(320, 240);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -96,9 +110,9 @@
             // 
             this.Cam_but.BackColor = System.Drawing.Color.Pink;
             this.Cam_but.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Cam_but.Location = new System.Drawing.Point(510, 639);
+            this.Cam_but.Location = new System.Drawing.Point(950, 760);
             this.Cam_but.Name = "Cam_but";
-            this.Cam_but.Size = new System.Drawing.Size(154, 92);
+            this.Cam_but.Size = new System.Drawing.Size(313, 92);
             this.Cam_but.TabIndex = 2;
             this.Cam_but.Text = "Start cam";
             this.Cam_but.UseVisualStyleBackColor = false;
@@ -108,9 +122,9 @@
             // 
             this.Refr_but.BackColor = System.Drawing.Color.Pink;
             this.Refr_but.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Refr_but.Location = new System.Drawing.Point(700, 639);
+            this.Refr_but.Location = new System.Drawing.Point(724, 771);
             this.Refr_but.Name = "Refr_but";
-            this.Refr_but.Size = new System.Drawing.Size(152, 90);
+            this.Refr_but.Size = new System.Drawing.Size(155, 90);
             this.Refr_but.TabIndex = 3;
             this.Refr_but.Text = "Refresh";
             this.Refr_but.UseVisualStyleBackColor = false;
@@ -123,12 +137,13 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "PNG|*.png|JPG|*.jpg|BMP|*.bmp|AVI|*.avi|MP4|*.mp4";
             // 
             // Open_but
             // 
             this.Open_but.BackColor = System.Drawing.Color.Pink;
             this.Open_but.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Open_but.Location = new System.Drawing.Point(309, 639);
+            this.Open_but.Location = new System.Drawing.Point(724, 677);
             this.Open_but.Name = "Open_but";
             this.Open_but.Size = new System.Drawing.Size(155, 92);
             this.Open_but.TabIndex = 5;
@@ -139,7 +154,7 @@
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Pink;
-            this.pictureBox3.Location = new System.Drawing.Point(885, 258);
+            this.pictureBox3.Location = new System.Drawing.Point(943, 258);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(320, 240);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -149,7 +164,7 @@
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.Pink;
-            this.pictureBox4.Location = new System.Drawing.Point(885, 504);
+            this.pictureBox4.Location = new System.Drawing.Point(943, 504);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(320, 240);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -159,7 +174,7 @@
             // H_min_bar
             // 
             this.H_min_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.H_min_bar.Location = new System.Drawing.Point(15, 1069);
+            this.H_min_bar.Location = new System.Drawing.Point(1269, 91);
             this.H_min_bar.Maximum = 255;
             this.H_min_bar.Name = "H_min_bar";
             this.H_min_bar.Size = new System.Drawing.Size(407, 56);
@@ -168,7 +183,7 @@
             // S_min_bar
             // 
             this.S_min_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.S_min_bar.Location = new System.Drawing.Point(15, 1146);
+            this.S_min_bar.Location = new System.Drawing.Point(1269, 168);
             this.S_min_bar.Maximum = 255;
             this.S_min_bar.Name = "S_min_bar";
             this.S_min_bar.Size = new System.Drawing.Size(407, 56);
@@ -177,7 +192,7 @@
             // V_min_bar
             // 
             this.V_min_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.V_min_bar.Location = new System.Drawing.Point(15, 1215);
+            this.V_min_bar.Location = new System.Drawing.Point(1269, 237);
             this.V_min_bar.Maximum = 255;
             this.V_min_bar.Name = "V_min_bar";
             this.V_min_bar.Size = new System.Drawing.Size(407, 56);
@@ -186,7 +201,7 @@
             // V_max_bar
             // 
             this.V_max_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.V_max_bar.Location = new System.Drawing.Point(464, 1215);
+            this.V_max_bar.Location = new System.Drawing.Point(1269, 468);
             this.V_max_bar.Maximum = 255;
             this.V_max_bar.Name = "V_max_bar";
             this.V_max_bar.Size = new System.Drawing.Size(407, 56);
@@ -195,7 +210,7 @@
             // S_max_bar
             // 
             this.S_max_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.S_max_bar.Location = new System.Drawing.Point(464, 1146);
+            this.S_max_bar.Location = new System.Drawing.Point(1269, 399);
             this.S_max_bar.Maximum = 255;
             this.S_max_bar.Name = "S_max_bar";
             this.S_max_bar.Size = new System.Drawing.Size(407, 56);
@@ -204,7 +219,7 @@
             // H_max_bar
             // 
             this.H_max_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.H_max_bar.Location = new System.Drawing.Point(464, 1069);
+            this.H_max_bar.Location = new System.Drawing.Point(1269, 322);
             this.H_max_bar.Maximum = 255;
             this.H_max_bar.Name = "H_max_bar";
             this.H_max_bar.Size = new System.Drawing.Size(407, 56);
@@ -213,7 +228,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 1050);
+            this.label1.Location = new System.Drawing.Point(1270, 72);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(62, 16);
             this.label1.TabIndex = 14;
@@ -222,7 +237,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(461, 1050);
+            this.label2.Location = new System.Drawing.Point(1266, 303);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 16);
             this.label2.TabIndex = 15;
@@ -231,7 +246,7 @@
             // HSV_box
             // 
             this.HSV_box.BackColor = System.Drawing.Color.IndianRed;
-            this.HSV_box.Location = new System.Drawing.Point(464, 941);
+            this.HSV_box.Location = new System.Drawing.Point(1269, 563);
             this.HSV_box.Name = "HSV_box";
             this.HSV_box.Size = new System.Drawing.Size(158, 22);
             this.HSV_box.TabIndex = 16;
@@ -239,7 +254,7 @@
             // Par2_bar
             // 
             this.Par2_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.Par2_bar.Location = new System.Drawing.Point(15, 990);
+            this.Par2_bar.Location = new System.Drawing.Point(12, 977);
             this.Par2_bar.Maximum = 255;
             this.Par2_bar.Name = "Par2_bar";
             this.Par2_bar.Size = new System.Drawing.Size(407, 56);
@@ -249,7 +264,7 @@
             // Par1_bar
             // 
             this.Par1_bar.BackColor = System.Drawing.Color.IndianRed;
-            this.Par1_bar.Location = new System.Drawing.Point(15, 921);
+            this.Par1_bar.Location = new System.Drawing.Point(12, 908);
             this.Par1_bar.Maximum = 255;
             this.Par1_bar.Name = "Par1_bar";
             this.Par1_bar.Size = new System.Drawing.Size(407, 56);
@@ -259,7 +274,7 @@
             // Par_box
             // 
             this.Par_box.BackColor = System.Drawing.Color.IndianRed;
-            this.Par_box.Location = new System.Drawing.Point(464, 983);
+            this.Par_box.Location = new System.Drawing.Point(434, 925);
             this.Par_box.Name = "Par_box";
             this.Par_box.Size = new System.Drawing.Size(158, 22);
             this.Par_box.TabIndex = 19;
@@ -268,24 +283,24 @@
             // 
             this.Real_coord.BackColor = System.Drawing.Color.Pink;
             this.Real_coord.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Real_coord.Location = new System.Drawing.Point(23, 707);
+            this.Real_coord.Location = new System.Drawing.Point(20, 747);
             this.Real_coord.Name = "Real_coord";
-            this.Real_coord.Size = new System.Drawing.Size(257, 22);
+            this.Real_coord.Size = new System.Drawing.Size(177, 22);
             this.Real_coord.TabIndex = 21;
             // 
             // Pix_coord
             // 
             this.Pix_coord.BackColor = System.Drawing.Color.Pink;
             this.Pix_coord.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Pix_coord.Location = new System.Drawing.Point(23, 651);
+            this.Pix_coord.Location = new System.Drawing.Point(21, 696);
             this.Pix_coord.Name = "Pix_coord";
-            this.Pix_coord.Size = new System.Drawing.Size(257, 22);
+            this.Pix_coord.Size = new System.Drawing.Size(176, 22);
             this.Pix_coord.TabIndex = 20;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(20, 632);
+            this.label3.Location = new System.Drawing.Point(18, 677);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(95, 16);
             this.label3.TabIndex = 22;
@@ -294,17 +309,17 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(20, 688);
+            this.label4.Location = new System.Drawing.Point(17, 728);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(168, 16);
+            this.label4.Size = new System.Drawing.Size(157, 16);
             this.label4.TabIndex = 23;
-            this.label4.Text = "Real world coordinat in mm";
+            this.label4.Text = "Real world coordinat in m";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(12, 875);
+            this.label5.Location = new System.Drawing.Point(9, 862);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(142, 32);
             this.label5.TabIndex = 24;
@@ -313,7 +328,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(463, 922);
+            this.label6.Location = new System.Drawing.Point(1268, 544);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(73, 16);
             this.label6.TabIndex = 25;
@@ -322,18 +337,122 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(463, 964);
+            this.label7.Location = new System.Drawing.Point(433, 906);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(130, 16);
             this.label7.TabIndex = 26;
             this.label7.Text = "HoughCircles param";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(18, 776);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(192, 16);
+            this.label8.TabIndex = 28;
+            this.label8.Text = "Angles for otbivania in degrees";
+            // 
+            // Angles_box
+            // 
+            this.Angles_box.BackColor = System.Drawing.Color.Pink;
+            this.Angles_box.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Angles_box.Location = new System.Drawing.Point(21, 795);
+            this.Angles_box.Name = "Angles_box";
+            this.Angles_box.Size = new System.Drawing.Size(176, 22);
+            this.Angles_box.TabIndex = 27;
+            // 
+            // Final_pointX_bar
+            // 
+            this.Final_pointX_bar.BackColor = System.Drawing.Color.Pink;
+            this.Final_pointX_bar.Location = new System.Drawing.Point(20, 618);
+            this.Final_pointX_bar.Minimum = -10;
+            this.Final_pointX_bar.Name = "Final_pointX_bar";
+            this.Final_pointX_bar.Size = new System.Drawing.Size(859, 56);
+            this.Final_pointX_bar.TabIndex = 29;
+            // 
+            // Final_pointY_bar
+            // 
+            this.Final_pointY_bar.BackColor = System.Drawing.Color.Pink;
+            this.Final_pointY_bar.Location = new System.Drawing.Point(881, 18);
+            this.Final_pointY_bar.Minimum = -10;
+            this.Final_pointY_bar.Name = "Final_pointY_bar";
+            this.Final_pointY_bar.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.Final_pointY_bar.Size = new System.Drawing.Size(56, 594);
+            this.Final_pointY_bar.TabIndex = 30;
+            // 
+            // Otrisovka
+            // 
+            this.Otrisovka.BackColor = System.Drawing.Color.Pink;
+            this.Otrisovka.Location = new System.Drawing.Point(447, 690);
+            this.Otrisovka.Name = "Otrisovka";
+            this.Otrisovka.Size = new System.Drawing.Size(262, 166);
+            this.Otrisovka.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Otrisovka.TabIndex = 31;
+            this.Otrisovka.TabStop = false;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(19, 820);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(120, 16);
+            this.label9.TabIndex = 33;
+            this.label9.Text = "Final point ball in m";
+            // 
+            // FP_box
+            // 
+            this.FP_box.BackColor = System.Drawing.Color.Pink;
+            this.FP_box.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.FP_box.Location = new System.Drawing.Point(22, 839);
+            this.FP_box.Name = "FP_box";
+            this.FP_box.Size = new System.Drawing.Size(175, 22);
+            this.FP_box.TabIndex = 32;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(226, 751);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(186, 16);
+            this.label10.TabIndex = 39;
+            this.label10.Text = "Coordinat Z hitting the ball in m";
+            // 
+            // Range_box
+            // 
+            this.Range_box.BackColor = System.Drawing.Color.Pink;
+            this.Range_box.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Range_box.Location = new System.Drawing.Point(229, 770);
+            this.Range_box.Name = "Range_box";
+            this.Range_box.Size = new System.Drawing.Size(176, 22);
+            this.Range_box.TabIndex = 38;
+            this.Range_box.Text = "0,5";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(1269, 18);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(142, 32);
+            this.label11.TabIndex = 40;
+            this.label11.Text = "Dev mode";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(1217, 753);
+            this.ClientSize = new System.Drawing.Size(1268, 869);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.Range_box);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.FP_box);
+            this.Controls.Add(this.Otrisovka);
+            this.Controls.Add(this.Final_pointY_bar);
+            this.Controls.Add(this.Final_pointX_bar);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.Angles_box);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -374,6 +493,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.H_max_bar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Par2_bar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Par1_bar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Final_pointX_bar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Final_pointY_bar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Otrisovka)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -409,6 +531,16 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox Angles_box;
+        private System.Windows.Forms.TrackBar Final_pointX_bar;
+        private System.Windows.Forms.TrackBar Final_pointY_bar;
+        private System.Windows.Forms.PictureBox Otrisovka;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox FP_box;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox Range_box;
+        private System.Windows.Forms.Label label11;
     }
 }
 
